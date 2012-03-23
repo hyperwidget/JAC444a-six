@@ -85,8 +85,8 @@ private void _setupTask() {
       // get the uri for the static map
       String uri = MapLookup.getMap(Double.parseDouble(ttfLat.getText()),
                                     Double.parseDouble(ttfLon.getText()),
-                                    Integer.parseInt(ttfSizeW.getText()),
-                                    Integer.parseInt(ttfSizeH.getText()),
+                                    512,
+                                    512,
                                     Integer.parseInt(ttfZoom.getText())
       );
       sout("Google Maps URI=" + uri);
@@ -349,22 +349,22 @@ private void initComponents() {
   			((TableLayout)panel1.getLayout()).setVGap(5);
 
   			//---- label2 ----
-  			label2.setText("Size Width");
-  			label2.setHorizontalAlignment(SwingConstants.RIGHT);
-  			panel1.add(label2, new TableLayoutConstraints(0, 0, 0, 0, TableLayoutConstraints.FULL, TableLayoutConstraints.FULL));
+//  			label2.setText("Size Width");
+//  			label2.setHorizontalAlignment(SwingConstants.RIGHT);
+//  			panel1.add(label2, new TableLayoutConstraints(0, 0, 0, 0, TableLayoutConstraints.FULL, TableLayoutConstraints.FULL));
 
   			//---- ttfSizeW ----
-  			ttfSizeW.setText("512");
-  			panel1.add(ttfSizeW, new TableLayoutConstraints(1, 0, 1, 0, TableLayoutConstraints.FULL, TableLayoutConstraints.FULL));
+//  			ttfSizeW.setText("512");
+//  			panel1.add(ttfSizeW, new TableLayoutConstraints(1, 0, 1, 0, TableLayoutConstraints.FULL, TableLayoutConstraints.FULL));
 
   			//---- label4 ----
   			label4.setText("Latitude");
   			label4.setHorizontalAlignment(SwingConstants.RIGHT);
-  			panel1.add(label4, new TableLayoutConstraints(2, 0, 2, 0, TableLayoutConstraints.FULL, TableLayoutConstraints.FULL));
+  			panel1.add(label4, new TableLayoutConstraints(0, 0, 0, 0, TableLayoutConstraints.FULL, TableLayoutConstraints.FULL));
 
   			//---- ttfLat ----
   			ttfLat.setText("38.931099");
-  			panel1.add(ttfLat, new TableLayoutConstraints(3, 0, 3, 0, TableLayoutConstraints.FULL, TableLayoutConstraints.FULL));
+  			panel1.add(ttfLat, new TableLayoutConstraints(1, 0, 1, 0, TableLayoutConstraints.FULL, TableLayoutConstraints.FULL));
 
   			//---- btnGetMap ----
   			btnGetMap.setText("Get Map");
@@ -378,13 +378,13 @@ private void initComponents() {
   			panel1.add(btnGetMap, new TableLayoutConstraints(5, 0, 5, 0, TableLayoutConstraints.FULL, TableLayoutConstraints.FULL));
 
   			//---- label3 ----
-  			label3.setText("Size Height");
-  			label3.setHorizontalAlignment(SwingConstants.RIGHT);
-  			panel1.add(label3, new TableLayoutConstraints(0, 1, 0, 1, TableLayoutConstraints.FULL, TableLayoutConstraints.FULL));
+//  			label3.setText("Size Height");
+//  			label3.setHorizontalAlignment(SwingConstants.RIGHT);
+//  			panel1.add(label3, new TableLayoutConstraints(0, 1, 0, 1, TableLayoutConstraints.FULL, TableLayoutConstraints.FULL));
 
   			//---- ttfSizeH ----
-  			ttfSizeH.setText("512");
-  			panel1.add(ttfSizeH, new TableLayoutConstraints(1, 1, 1, 1, TableLayoutConstraints.FULL, TableLayoutConstraints.FULL));
+//  			ttfSizeH.setText("512");
+//  			panel1.add(ttfSizeH, new TableLayoutConstraints(1, 1, 1, 1, TableLayoutConstraints.FULL, TableLayoutConstraints.FULL));
 
   			//---- label5 ----
   			label5.setText("Longitude");
@@ -408,13 +408,13 @@ private void initComponents() {
   			panel1.add(btnQuit, new TableLayoutConstraints(5, 1, 5, 1, TableLayoutConstraints.FULL, TableLayoutConstraints.FULL));
 
   			//---- label1 ----
-  			label1.setText("License Key");
-  			label1.setHorizontalAlignment(SwingConstants.RIGHT);
-  			panel1.add(label1, new TableLayoutConstraints(0, 2, 0, 2, TableLayoutConstraints.FULL, TableLayoutConstraints.FULL));
+//  			label1.setText("License Key");
+//  			label1.setHorizontalAlignment(SwingConstants.RIGHT);
+//  			panel1.add(label1, new TableLayoutConstraints(0, 2, 0, 2, TableLayoutConstraints.FULL, TableLayoutConstraints.FULL));
 
   			//---- ttfLicense ----
-  			ttfLicense.setToolTipText("Enter your own URI for a file to download in the background");
-  			panel1.add(ttfLicense, new TableLayoutConstraints(1, 2, 1, 2, TableLayoutConstraints.FULL, TableLayoutConstraints.FULL));
+//  			ttfLicense.setToolTipText("Enter your own URI for a file to download in the background");
+//  			panel1.add(ttfLicense, new TableLayoutConstraints(1, 2, 1, 2, TableLayoutConstraints.FULL, TableLayoutConstraints.FULL));
 
   			//---- label6 ----
   			label6.setText("Zoom");
