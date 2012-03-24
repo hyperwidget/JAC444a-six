@@ -313,6 +313,8 @@ private void initComponents() {
   ttfProgressMsg = new JTextField();
   progressBar = new JProgressBar();
   lblProgressStatus = new JLabel();
+  ddlLocation = new JComboBox();
+  lblLocation = new JLabel();
 
   //======== this ========
   setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
@@ -359,7 +361,7 @@ private void initComponents() {
 
   			//---- label4 ----
   			label4.setText("Latitude");
-  			label4.setHorizontalAlignment(SwingConstants.RIGHT);
+  			label4.setHorizontalAlignment(SwingConstants.LEFT);
   			panel1.add(label4, new TableLayoutConstraints(0, 0, 0, 0, TableLayoutConstraints.FULL, TableLayoutConstraints.FULL));
 
   			//---- ttfLat ----
@@ -375,7 +377,7 @@ private void initComponents() {
   					startTaskAction();
   				}
   			});
-  			panel1.add(btnGetMap, new TableLayoutConstraints(5, 0, 5, 0, TableLayoutConstraints.FULL, TableLayoutConstraints.FULL));
+  			panel1.add(btnGetMap, new TableLayoutConstraints(3, 0, 3, 0, TableLayoutConstraints.FULL, TableLayoutConstraints.FULL));
 
   			//---- label3 ----
 //  			label3.setText("Size Height");
@@ -388,24 +390,24 @@ private void initComponents() {
 
   			//---- label5 ----
   			label5.setText("Longitude");
-  			label5.setHorizontalAlignment(SwingConstants.RIGHT);
-  			panel1.add(label5, new TableLayoutConstraints(2, 1, 2, 1, TableLayoutConstraints.FULL, TableLayoutConstraints.FULL));
+  			label5.setHorizontalAlignment(SwingConstants.LEFT);
+  			panel1.add(label5, new TableLayoutConstraints(0, 1, 0, 1, TableLayoutConstraints.FULL, TableLayoutConstraints.FULL));
 
   			//---- ttfLon ----
   			ttfLon.setText("-77.3489");
-  			panel1.add(ttfLon, new TableLayoutConstraints(3, 1, 3, 1, TableLayoutConstraints.FULL, TableLayoutConstraints.FULL));
+  			panel1.add(ttfLon, new TableLayoutConstraints(1, 1, 1, 1, TableLayoutConstraints.FULL, TableLayoutConstraints.FULL));
 
   			//---- btnQuit ----
   			btnQuit.setText("Quit");
   			btnQuit.setMnemonic('Q');
   			btnQuit.setHorizontalAlignment(SwingConstants.LEFT);
-  			btnQuit.setHorizontalTextPosition(SwingConstants.RIGHT);
+  			btnQuit.setHorizontalTextPosition(SwingConstants.LEFT);
   			btnQuit.addActionListener(new ActionListener() {
   				public void actionPerformed(ActionEvent e) {
   					quitProgram();
   				}
   			});
-  			panel1.add(btnQuit, new TableLayoutConstraints(5, 1, 5, 1, TableLayoutConstraints.FULL, TableLayoutConstraints.FULL));
+  			panel1.add(btnQuit, new TableLayoutConstraints(3, 1, 3, 1, TableLayoutConstraints.FULL, TableLayoutConstraints.FULL));
 
   			//---- label1 ----
 //  			label1.setText("License Key");
@@ -418,12 +420,20 @@ private void initComponents() {
 
   			//---- label6 ----
   			label6.setText("Zoom");
-  			label6.setHorizontalAlignment(SwingConstants.RIGHT);
-  			panel1.add(label6, new TableLayoutConstraints(2, 2, 2, 2, TableLayoutConstraints.FULL, TableLayoutConstraints.FULL));
+  			label6.setHorizontalAlignment(SwingConstants.LEFT);
+  			panel1.add(label6, new TableLayoutConstraints(0, 2, 0, 2, TableLayoutConstraints.FULL, TableLayoutConstraints.FULL));
 
   			//---- ttfZoom ----
   			ttfZoom.setText("14");
-  			panel1.add(ttfZoom, new TableLayoutConstraints(3, 2, 3, 2, TableLayoutConstraints.FULL, TableLayoutConstraints.FULL));
+  			panel1.add(ttfZoom, new TableLayoutConstraints(1, 2, 1, 2, TableLayoutConstraints.FULL, TableLayoutConstraints.FULL));
+
+  			//----lblLocation
+  			lblLocation.setText("Saved Location");
+  			lblLocation.setHorizontalAlignment(SwingConstants.LEFT);
+  			panel1.add(lblLocation, new TableLayoutConstraints(0,3,0,3, TableLayoutConstraints.FULL, TableLayoutConstraints.FULL));
+  			
+  			
+			//-----ddlLocation----
   		}
   		contentPanel.add(panel1, new TableLayoutConstraints(0, 0, 0, 0, TableLayoutConstraints.FULL, TableLayoutConstraints.FULL));
 
@@ -527,5 +537,7 @@ private JCheckBox checkboxSendStatus;
 private JTextField ttfProgressMsg;
 private JProgressBar progressBar;
 private JLabel lblProgressStatus;
+private JComboBox ddlLocation;
+private JLabel lblLocation;
 // JFormDesigner - End of variables declaration  //GEN-END:variables
 }
