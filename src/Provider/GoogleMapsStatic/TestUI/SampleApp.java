@@ -152,7 +152,7 @@ private void _setupTask() {
               ? "null"
               : value.toString()));
           if (_img != null) {
-            _displayImgInFrame();
+            _displayImgInSameFrame();
           }
           else _displayRespStrInFrame();
 
@@ -219,6 +219,13 @@ private void _displayImgInFrame() {
 
   GUIUtils.centerOnScreen(frame);
   frame.setVisible(true);
+}
+
+private void _displayImgInSameFrame() {
+
+  mapLabel.setIcon(new ImageIcon(_img));
+  mapLabel.setToolTipText(MessageFormat.format("<html>Image downloaded from URI<br>size: w={0}, h={1}</html>",
+          									   _img.getWidth(), _img.getHeight()));
 }
 
 private void _displayRespStrInFrame() {
@@ -318,6 +325,12 @@ private void initComponents() {
   lblLocName = new JLabel();
   btnSave = new JButton();
   tbxLocName = new JTextField();
+  panel4 = new JPanel();
+  mapLabel = new JLabel();
+  btnUp = new JButton();
+  btnDown = new JButton();
+  btnLeft = new JButton();
+  btnRight = new JButton();
 
   //======== this ========
   setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
@@ -336,11 +349,49 @@ private void initComponents() {
   	{
   		contentPanel.setOpaque(false);
   		contentPanel.setLayout(new TableLayout(new double[][] {
-  			{TableLayout.FILL, TableLayout.FILL},
+  			{0.44, 0.56, TableLayout.FILL},
   			{TableLayout.PREFERRED, TableLayout.FILL, TableLayout.PREFERRED}}));
   		((TableLayout)contentPanel.getLayout()).setHGap(5);
   		((TableLayout)contentPanel.getLayout()).setVGap(5);
 
+  		//======== panel4 ========
+  		panel4.setOpaque(false);
+  		panel4.setBorder(new CompoundBorder(
+  				new TitledBorder("Map"),
+  				Borders.DLU2_BORDER));
+  		panel4.setLayout(new TableLayout(new double[][]{
+  			{.05,.80,.05},
+  			{.05,.80,.05}	
+  		}));
+  		((TableLayout)panel4.getLayout()).setHGap(1);
+  		((TableLayout)panel4.getLayout()).setHGap(1);
+  		
+  		//----btnUp----
+  		btnUp.setText("^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^");
+  		btnUp.setHorizontalAlignment(SwingConstants.CENTER);
+  		btnUp.setMnemonic('U');
+  		
+  		//----btnDown----
+  		btnDown.setText("v v v v v v v v v v v v v v v v v v v v v v v v v v v v v v v v v v v v v v v v v v");
+  		btnDown.setHorizontalAlignment(SwingConstants.CENTER);
+  		btnDown.setMnemonic('D');
+  		
+  		//----btnLeft----
+  		btnLeft.setText("<");
+  		btnLeft.setHorizontalAlignment(SwingConstants.CENTER);
+  		btnLeft.setMnemonic('L');
+  		
+  		//----btnRight----
+  		btnRight.setText(">");
+  		btnRight.setHorizontalAlignment(SwingConstants.CENTER);
+  		btnRight.setMnemonic('R');
+  		
+  		panel4.add(btnUp, new TableLayoutConstraints(0,0,2,0, TableLayoutConstraints.FULL, TableLayoutConstraints.FULL));
+  		panel4.add(btnDown, new TableLayoutConstraints(0,2,2,2, TableLayoutConstraints.FULL, TableLayoutConstraints.FULL));
+  		panel4.add(btnLeft, new TableLayoutConstraints(0,1,0,1, TableLayoutConstraints.FULL, TableLayoutConstraints.FULL));
+  		panel4.add(btnRight, new TableLayoutConstraints(2,1,2,1, TableLayoutConstraints.FULL, TableLayoutConstraints.FULL));
+  		panel4.add(mapLabel, new TableLayoutConstraints(1,1,1,1, TableLayoutConstraints.FULL, TableLayoutConstraints.FULL));
+  		
   		//======== panel1 ========
   		{
   			panel1.setOpaque(false);
@@ -348,7 +399,7 @@ private void initComponents() {
   				new TitledBorder("Configure the inputs to Google Static Maps"),
   				Borders.DLU2_BORDER));
   			panel1.setLayout(new TableLayout(new double[][] {
-  				{0.50, 0.50, TableLayout.FILL},
+  				{0.44, 0.56, TableLayout.FILL},
   				{TableLayout.PREFERRED, TableLayout.PREFERRED, TableLayout.PREFERRED,
   				TableLayout.PREFERRED,TableLayout.PREFERRED, TableLayout.PREFERRED,
   				TableLayout.PREFERRED, TableLayout.PREFERRED  }}));
@@ -527,11 +578,12 @@ private void initComponents() {
   			panel2.add(lblProgressStatus, new TableLayoutConstraints(2, 1, 2, 1, TableLayoutConstraints.FULL, TableLayoutConstraints.FULL));
   		}
   		contentPanel.add(panel2, new TableLayoutConstraints(0, 2, 0, 2, TableLayoutConstraints.FULL, TableLayoutConstraints.FULL));
+  		contentPanel.add(panel4, new TableLayoutConstraints(1, 0, 1, 2, TableLayoutConstraints.FULL, TableLayoutConstraints.FULL));
   	}
   	dialogPane.add(contentPanel, BorderLayout.CENTER);
   }
   contentPane.add(dialogPane, BorderLayout.CENTER);
-  setSize(675, 485);
+  setSize(1000, 620);
   setLocationRelativeTo(null);
   // JFormDesigner - End of component initialization  //GEN-END:initComponents
 }
@@ -569,6 +621,13 @@ private JLabel lblLocation;
 private JLabel lblLocName;
 private JButton btnSave;
 private JTextField tbxLocName;
+private JPanel panel4;
+private JLabel mapLabel;
+private JButton btnUp;
+private JButton btnDown;
+private JButton btnLeft;
+private JButton btnRight;
+
 
 // JFormDesigner - End of variables declaration  //GEN-END:variables
 }
