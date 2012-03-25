@@ -315,6 +315,9 @@ private void initComponents() {
   lblProgressStatus = new JLabel();
   ddlLocation = new JComboBox();
   lblLocation = new JLabel();
+  lblLocName = new JLabel();
+  btnSave = new JButton();
+  tbxLocName = new JTextField();
 
   //======== this ========
   setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
@@ -333,7 +336,7 @@ private void initComponents() {
   	{
   		contentPanel.setOpaque(false);
   		contentPanel.setLayout(new TableLayout(new double[][] {
-  			{TableLayout.FILL},
+  			{TableLayout.FILL, TableLayout.FILL},
   			{TableLayout.PREFERRED, TableLayout.FILL, TableLayout.PREFERRED}}));
   		((TableLayout)contentPanel.getLayout()).setHGap(5);
   		((TableLayout)contentPanel.getLayout()).setVGap(5);
@@ -345,8 +348,10 @@ private void initComponents() {
   				new TitledBorder("Configure the inputs to Google Static Maps"),
   				Borders.DLU2_BORDER));
   			panel1.setLayout(new TableLayout(new double[][] {
-  				{0.17, 0.17, 0.17, 0.17, 0.05, TableLayout.FILL},
-  				{TableLayout.PREFERRED, TableLayout.PREFERRED, TableLayout.PREFERRED}}));
+  				{0.50, 0.50, TableLayout.FILL},
+  				{TableLayout.PREFERRED, TableLayout.PREFERRED, TableLayout.PREFERRED,
+  				TableLayout.PREFERRED,TableLayout.PREFERRED, TableLayout.PREFERRED,
+  				TableLayout.PREFERRED, TableLayout.PREFERRED  }}));
   			((TableLayout)panel1.getLayout()).setHGap(5);
   			((TableLayout)panel1.getLayout()).setVGap(5);
 
@@ -377,7 +382,7 @@ private void initComponents() {
   					startTaskAction();
   				}
   			});
-  			panel1.add(btnGetMap, new TableLayoutConstraints(3, 0, 3, 0, TableLayoutConstraints.FULL, TableLayoutConstraints.FULL));
+  			panel1.add(btnGetMap, new TableLayoutConstraints(0, 5, 0, 5, TableLayoutConstraints.FULL, TableLayoutConstraints.FULL));
 
   			//---- label3 ----
 //  			label3.setText("Size Height");
@@ -398,16 +403,16 @@ private void initComponents() {
   			panel1.add(ttfLon, new TableLayoutConstraints(1, 1, 1, 1, TableLayoutConstraints.FULL, TableLayoutConstraints.FULL));
 
   			//---- btnQuit ----
-  			btnQuit.setText("Quit");
-  			btnQuit.setMnemonic('Q');
-  			btnQuit.setHorizontalAlignment(SwingConstants.LEFT);
-  			btnQuit.setHorizontalTextPosition(SwingConstants.LEFT);
-  			btnQuit.addActionListener(new ActionListener() {
-  				public void actionPerformed(ActionEvent e) {
-  					quitProgram();
-  				}
-  			});
-  			panel1.add(btnQuit, new TableLayoutConstraints(3, 1, 3, 1, TableLayoutConstraints.FULL, TableLayoutConstraints.FULL));
+//  			btnQuit.setText("Quit");
+//  			btnQuit.setMnemonic('Q');
+//  			btnQuit.setHorizontalAlignment(SwingConstants.LEFT);
+//  			btnQuit.setHorizontalTextPosition(SwingConstants.LEFT);
+//  			btnQuit.addActionListener(new ActionListener() {
+//  				public void actionPerformed(ActionEvent e) {
+//  					quitProgram();
+//  				}
+//  			});
+//  			panel1.add(btnQuit, new TableLayoutConstraints(1, 5, 1, 5, TableLayoutConstraints.FULL, TableLayoutConstraints.FULL));
 
   			//---- label1 ----
 //  			label1.setText("License Key");
@@ -428,15 +433,37 @@ private void initComponents() {
   			panel1.add(ttfZoom, new TableLayoutConstraints(1, 2, 1, 2, TableLayoutConstraints.FULL, TableLayoutConstraints.FULL));
 
   			//----lblLocation
-  			lblLocation.setText("Saved Location");
-  			lblLocation.setHorizontalAlignment(SwingConstants.LEFT);
-  			panel1.add(lblLocation, new TableLayoutConstraints(0,3,0,3, TableLayoutConstraints.FULL, TableLayoutConstraints.FULL));
-  			
+  			lblLocation.setText("Saved Locations");
+  			lblLocation.setHorizontalAlignment(SwingConstants.CENTER);
+  			panel1.add(lblLocation, new TableLayoutConstraints(0,3,1,3, TableLayoutConstraints.FULL, TableLayoutConstraints.FULL));
   			
 			//-----ddlLocation----
+  			panel1.add(ddlLocation, new TableLayoutConstraints(0,4,1,4, TableLayoutConstraints.FULL, TableLayoutConstraints.FULL));
+  	
+  			//----lblLocName----
+  			lblLocName.setText("Name to save location as");
+  			lblLocation.setHorizontalAlignment(SwingConstants.CENTER);
+  			panel1.add(lblLocName, new TableLayoutConstraints(0,6,1,6, TableLayoutConstraints.FULL, TableLayoutConstraints.FULL));
+ 
+  			//----btnSave----
+  			btnSave.setText("Save Location");
+  			btnSave.setHorizontalAlignment(SwingConstants.LEFT);
+  			btnSave.setMnemonic('S');
+  			btnSave.addActionListener(new ActionListener(){
+  				public void actionPerformed(ActionEvent e){
+  					startTaskAction();
+  				}
+  			});
+  		    panel1.add(btnSave, new TableLayoutConstraints(1,7,1,7, TableLayoutConstraints.FULL, TableLayoutConstraints.FULL));  		
+  			
+  			//----tbxLocName----
+  			tbxLocName.setText("");
+  			panel1.add(tbxLocName, new TableLayoutConstraints(0,7,0,7, TableLayoutConstraints.FULL, TableLayoutConstraints.FULL));
+  		
   		}
   		contentPanel.add(panel1, new TableLayoutConstraints(0, 0, 0, 0, TableLayoutConstraints.FULL, TableLayoutConstraints.FULL));
-
+  		
+  		
   		//======== scrollPane1 ========
   		{
   			scrollPane1.setBorder(new TitledBorder("System.out - displays all status and progress messages, etc."));
@@ -539,5 +566,9 @@ private JProgressBar progressBar;
 private JLabel lblProgressStatus;
 private JComboBox ddlLocation;
 private JLabel lblLocation;
+private JLabel lblLocName;
+private JButton btnSave;
+private JTextField tbxLocName;
+
 // JFormDesigner - End of variables declaration  //GEN-END:variables
 }
