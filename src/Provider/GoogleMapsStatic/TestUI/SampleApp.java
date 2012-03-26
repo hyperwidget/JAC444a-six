@@ -25,8 +25,42 @@ import java.beans.*;
 import java.text.*;
 import java.util.concurrent.*;
 
+
 /** @author nazmul idris */
 public class SampleApp extends JFrame {
+	
+	
+	
+/** @author Hunter Jansen*/
+private void moveUp(){
+	double newValue = Double.parseDouble(ttfLat.getText())+.005;
+	ttfLat.setText(Double.toString(newValue));
+	startTaskAction();	
+}	
+
+/** @author Hunter Jansen*/
+private void moveDown(){
+	double newValue = Double.parseDouble(ttfLat.getText())-.005;
+	ttfLat.setText(Double.toString(newValue));
+	startTaskAction();	
+}
+
+/** @author Hunter Jansen*/
+private void moveLeft(){
+	double newValue = Double.parseDouble(ttfLon.getText())-.005;
+	ttfLon.setText(Double.toString(newValue));
+	startTaskAction();	
+}
+
+/** @author Hunter Jansen*/
+private void moveRight(){
+	double newValue = Double.parseDouble(ttfLon.getText())+.005;
+	ttfLon.setText(Double.toString(newValue));
+	startTaskAction();	
+}
+
+	
+	
 //XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX
 // data members
 //XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX
@@ -370,21 +404,41 @@ private void initComponents() {
   		btnUp.setText("^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^");
   		btnUp.setHorizontalAlignment(SwingConstants.CENTER);
   		btnUp.setMnemonic('U');
+  		btnUp.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				moveUp();
+			}
+		});
   		
   		//----btnDown----
   		btnDown.setText("v v v v v v v v v v v v v v v v v v v v v v v v v v v v v v v v v v v v v v v v v v");
   		btnDown.setHorizontalAlignment(SwingConstants.CENTER);
   		btnDown.setMnemonic('D');
+  		btnDown.addActionListener(new ActionListener() {
+				public void actionPerformed(ActionEvent e) {
+					moveDown();
+				}
+			});
   		
   		//----btnLeft----
   		btnLeft.setText("<");
   		btnLeft.setHorizontalAlignment(SwingConstants.CENTER);
   		btnLeft.setMnemonic('L');
+  		btnLeft.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				moveLeft();
+			}
+		});
   		
   		//----btnRight----
   		btnRight.setText(">");
   		btnRight.setHorizontalAlignment(SwingConstants.CENTER);
   		btnRight.setMnemonic('R');
+  		btnRight.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				moveRight();
+			}
+		});
   		
   		panel4.add(btnUp, new TableLayoutConstraints(0,0,2,0, TableLayoutConstraints.FULL, TableLayoutConstraints.FULL));
   		panel4.add(btnDown, new TableLayoutConstraints(0,2,2,2, TableLayoutConstraints.FULL, TableLayoutConstraints.FULL));
