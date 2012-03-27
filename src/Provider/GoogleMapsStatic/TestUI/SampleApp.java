@@ -100,11 +100,11 @@ public class SampleApp extends JFrame {
 			ttfLat.setText(Double.toString(newValue));
 		}
 		else if(e.getSource() == btnLeft){
-			newValue = Double.parseDouble(ttfLon.getText())+shift;
+			newValue = Double.parseDouble(ttfLon.getText())-shift;
 			ttfLon.setText(Double.toString(newValue));			
 		}
 		else if(e.getSource() == btnRight){
-			newValue = Double.parseDouble(ttfLon.getText())-shift;
+			newValue = Double.parseDouble(ttfLon.getText())+shift;
 			ttfLon.setText(Double.toString(newValue));
 		}		
 		startTaskAction();
@@ -475,8 +475,8 @@ private void initComponents() {
   				new TitledBorder("Map"),
   				Borders.DLU2_BORDER));
   		panel4.setLayout(new TableLayout(new double[][]{
-  			{.05,.80,.05},
-  			{.05,.80,.05}	
+  			{.05,.90,.05},
+  			{.05,.90,.05}	
   		}));
   		((TableLayout)panel4.getLayout()).setHGap(1);
   		((TableLayout)panel4.getLayout()).setHGap(1);
