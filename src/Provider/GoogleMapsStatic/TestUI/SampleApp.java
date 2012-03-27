@@ -32,6 +32,87 @@ public class SampleApp extends JFrame {
 	
 	
 /** @author Hunter Jansen*/
+	
+	class EventHandler implements ActionListener{
+
+		double shift, newValue;
+		
+		private void getShift(){
+			double amount = 0;
+			switch(Integer.parseInt(ttfZoom.getText())){
+			case 1:
+				shift = 30.00;
+				break;
+			case 2:
+				shift = 25.00;
+				break;
+			case 3:
+				shift = 20.00;
+				break;
+			case 4:
+				shift = 10.00;
+				break;
+			case 5:
+				shift = 5.00;
+				break;
+			case 6:
+				shift = 2.5;
+				break;
+			case 7:
+				shift = 1.5;
+				break;
+			case 8:
+				shift = .6;
+				break;
+			case 9:
+				shift = .35;
+				break;
+			case 10:
+				shift = .17;
+				break;
+			case 11:
+				shift = .09;
+				break;
+			case 12:
+				shift = .04;
+				break;
+			case 13:
+				shift = .02;
+				break;
+			case 14:
+				shift = .01;
+				break;
+			default:
+				shift = .03;
+					break;				
+			}
+		}
+		
+	@Override
+	public void actionPerformed(ActionEvent e) {
+		getShift();
+		if(e.getSource() == btnUp){
+			newValue = Double.parseDouble(ttfLat.getText())+shift;
+			ttfLat.setText(Double.toString(newValue));
+		}
+		else if(e.getSource() == btnDown){
+			newValue = Double.parseDouble(ttfLat.getText())-shift;
+			ttfLat.setText(Double.toString(newValue));
+		}
+		else if(e.getSource() == btnLeft){
+			newValue = Double.parseDouble(ttfLon.getText())+shift;
+			ttfLon.setText(Double.toString(newValue));			
+		}
+		else if(e.getSource() == btnRight){
+			newValue = Double.parseDouble(ttfLon.getText())-shift;
+			ttfLon.setText(Double.toString(newValue));
+		}		
+		startTaskAction();
+	}
+	
+	
+}
+	
 private void moveUp(){
 	double newValue = Double.parseDouble(ttfLat.getText())+.005;
 	ttfLat.setText(Double.toString(newValue));
@@ -400,45 +481,32 @@ private void initComponents() {
   		((TableLayout)panel4.getLayout()).setHGap(1);
   		((TableLayout)panel4.getLayout()).setHGap(1);
   		
+  		EventHandler moveListen = new EventHandler();
+  		
+  		
   		//----btnUp----
   		btnUp.setText("^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^");
   		btnUp.setHorizontalAlignment(SwingConstants.CENTER);
   		btnUp.setMnemonic('U');
-  		btnUp.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				moveUp();
-			}
-		});
+  		btnUp.addActionListener(moveListen);
   		
   		//----btnDown----
   		btnDown.setText("v v v v v v v v v v v v v v v v v v v v v v v v v v v v v v v v v v v v v v v v v v");
   		btnDown.setHorizontalAlignment(SwingConstants.CENTER);
   		btnDown.setMnemonic('D');
-  		btnDown.addActionListener(new ActionListener() {
-				public void actionPerformed(ActionEvent e) {
-					moveDown();
-				}
-			});
+  		btnDown.addActionListener(moveListen);
   		
   		//----btnLeft----
   		btnLeft.setText("<");
   		btnLeft.setHorizontalAlignment(SwingConstants.CENTER);
   		btnLeft.setMnemonic('L');
-  		btnLeft.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				moveLeft();
-			}
-		});
+  		btnLeft.addActionListener(moveListen);
   		
   		//----btnRight----
   		btnRight.setText(">");
   		btnRight.setHorizontalAlignment(SwingConstants.CENTER);
   		btnRight.setMnemonic('R');
-  		btnRight.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				moveRight();
-			}
-		});
+  		btnRight.addActionListener(moveListen);
   		
   		panel4.add(btnUp, new TableLayoutConstraints(0,0,2,0, TableLayoutConstraints.FULL, TableLayoutConstraints.FULL));
   		panel4.add(btnDown, new TableLayoutConstraints(0,2,2,2, TableLayoutConstraints.FULL, TableLayoutConstraints.FULL));
