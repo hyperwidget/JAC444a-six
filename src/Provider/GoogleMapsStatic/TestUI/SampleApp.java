@@ -92,19 +92,19 @@ public class SampleApp extends JFrame {
 				shift = .01;
 				break;
 			case 15:
-				shift = .01;
+				shift = .008;
 				break;
 			case 16:
-				shift = .01;
+				shift = .004;
 				break;
 			case 17:
-				shift = .01;
+				shift = .001;
 				break;
 			case 18:
-				shift = .01;
+				shift = .0009;
 				break;
 			case 19:
-				shift = .01;
+				shift = .0008;
 				break;
 			default:
 				shift = .03;
@@ -165,6 +165,7 @@ public class SampleApp extends JFrame {
 					if(values[0].equals(ddlLocation.getSelectedItem())){
 						ttfLat.setText(values[1]);
 						ttfLon.setText(values[2]);
+						startTaskAction();
 					}
 				}
 				in.close();
@@ -649,6 +650,7 @@ private void initComponents() {
   			panel1.add(label4, new TableLayoutConstraints(0, 0, 0, 0, TableLayoutConstraints.FULL, TableLayoutConstraints.FULL));
 
   			//---- ttfLat ----
+  			ttfLat.setText("-43.3489");
   			panel1.add(ttfLat, new TableLayoutConstraints(1, 0, 1, 0, TableLayoutConstraints.FULL, TableLayoutConstraints.FULL));
 
   			//---- btnGetMap ----
