@@ -89,6 +89,21 @@ public class SampleApp extends JFrame {
 			case 14:
 				shift = .01;
 				break;
+			case 15:
+				shift = .008;
+				break;
+			case 16:
+				shift = .004;
+				break;
+			case 17:
+				shift = .001;
+				break;
+			case 18:
+				shift = .0009;
+				break;
+			case 19:
+				shift = .0008;
+				break;
 			default:
 				shift = .03;
 					break;				
