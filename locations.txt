@@ -1,3 +1,4 @@
 Select a location to load
 Seneca@York;43.771404;-79.499474
 random;38.931099;-77.3489
+seneca2;43.771404;-79.499474

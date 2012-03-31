@@ -42,11 +42,7 @@ import java.util.concurrent.*;
 
 /** @author nazmul idris */
 public class SampleApp extends JFrame {
-	
-	
-	
 /** @author Hunter Jansen*/
-	
 	class EventHandler implements ActionListener{
 
 		double shift, newValue;
@@ -122,18 +118,22 @@ public class SampleApp extends JFrame {
 		if(e.getSource() == btnUp){
 			newValue = Double.parseDouble(ttfLat.getText())+shift;
 			ttfLat.setText(Double.toString(newValue));
+			sout("Panned UP: " + shift);
 		}
 		else if(e.getSource() == btnDown){
 			newValue = Double.parseDouble(ttfLat.getText())-shift;
 			ttfLat.setText(Double.toString(newValue));
+			sout("Panned DOWN: " + shift);
 		}
 		else if(e.getSource() == btnLeft){
 			newValue = Double.parseDouble(ttfLon.getText())-shift;
-			ttfLon.setText(Double.toString(newValue));			
+			ttfLon.setText(Double.toString(newValue));
+			sout("Panned LEFT: " + shift);		
 		}
 		else if(e.getSource() == btnRight){
 			newValue = Double.parseDouble(ttfLon.getText())+shift;
 			ttfLon.setText(Double.toString(newValue));
+			sout("Panned RIGHT: " + shift);
 		}		
 		startTaskAction();
 	}
@@ -151,32 +151,39 @@ public class SampleApp extends JFrame {
 				ddlLocation.addItem(values[0]);
 			}
 			in.close();
-		  }catch (Exception e){
-		  System.err.println("Error: " + e.getMessage());
 		  }
+		catch (Exception e){
+		  System.err.println("Error: " + e.getMessage());
+		}
 	}
 
 	class LocationListener implements ActionListener{
 		public void actionPerformed(ActionEvent e) {
 			if(ddlLocation.getSelectedIndex()!= 0){
-			try{
-				FileInputStream fstream = new FileInputStream("locations.txt");
-				DataInputStream in = new DataInputStream(fstream);
-				BufferedReader br = new BufferedReader(new InputStreamReader(in));
-				String strLine;
-				String values[];
-				while ((strLine = br.readLine()) != null)   {			
-					values = strLine.split(";");		
-					if(values[0].equals(ddlLocation.getSelectedItem())){
-						ttfLat.setText(values[1]);
-						ttfLon.setText(values[2]);
-						startTaskAction();
+				try{
+					FileInputStream fstream = new FileInputStream("locations.txt");
+					DataInputStream in = new DataInputStream(fstream);
+					BufferedReader br = new BufferedReader(new InputStreamReader(in));
+					String strLine;
+					String values[];
+					while ((strLine = br.readLine()) != null){			
+						values = strLine.split(";");		
+						if(values[0].equals(ddlLocation.getSelectedItem())){
+							ttfLat.setText(values[1]);
+							ttfLon.setText(values[2]);
+							startTaskAction();
+						}
 					}
+					in.close();
+					
+					sout("Viewing Location: " + ddlLocation.getSelectedItem() + "(" + ttfLat.getText() + ", " + ttfLon.getText() + ")");
 				}
-				in.close();
-			  }catch (Exception r){
-			  System.err.println("Error: " + r.getMessage());
-			  }	
+				catch (Exception r){
+					System.err.println("Error: " + r.getMessage());
+				}	
+			}
+			else{
+				startTaskAction();
 			}
 		}
 	}
@@ -193,42 +200,9 @@ class zoomEvent implements ChangeListener{
 	public void stateChanged(ChangeEvent e){
 		String value = "" + zoomSlider.getValue();
 		ttfZoom.setText(value);
-	}
-}
-
-/** @author Edwin Lim*/
-class lonlatMouseListener implements MouseListener{
-
-	@Override
-	public void mouseClicked(MouseEvent e) {
-		// TODO Auto-generated method stub
-		
-	}
-
-	@Override
-	public void mouseEntered(MouseEvent e) {
-		// TODO Auto-generated method stub
-		
-	}
-
-	@Override
-	public void mouseExited(MouseEvent e) {
-		// TODO Auto-generated method stub
 		startTaskAction();
+		sout("Zoomed To: " + value);
 	}
-
-	@Override
-	public void mousePressed(MouseEvent e) {
-		// TODO Auto-generated method stub
-		
-	}
-
-	@Override
-	public void mouseReleased(MouseEvent e) {
-		// TODO Auto-generated method stub
-		
-	}
-	
 }
 	
 //XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX
@@ -293,8 +267,7 @@ private void _setupTask() {
                                     512,
                                     Integer.parseInt(ttfZoom.getText())
       );
-      sout("Google Maps URI=" + uri);
-
+      
       // get the map from Google
       GetMethod get = new GetMethod(uri);
       new HttpClient().executeMethod(get);
@@ -303,11 +276,9 @@ private void _setupTask() {
 
       try {
         _img = ImageUtils.toCompatibleImage(ImageIO.read(data.getInputStream()));
-        sout("converted downloaded data to image...");
       }
       catch (Exception e) {
         _img = null;
-        sout("The URI is not an image. Data is downloaded, can't display it as an image.");
         _respStr = new String(data.getBytes());
       }
 
@@ -329,7 +300,6 @@ private void _setupTask() {
 
   _task.addStatusListener(new PropertyChangeListener() {
     public void propertyChange(PropertyChangeEvent evt) {
-      sout(":: task status change - " + ProgressMonitorUtils.parseStatusMessageFrom(evt));
       lblProgressStatus.setText(ProgressMonitorUtils.parseStatusMessageFrom(evt));
     }
   });
@@ -337,24 +307,16 @@ private void _setupTask() {
   _task.setTaskHandler(new
       SimpleTaskHandler<ByteBuffer>() {
         @Override public void beforeStart(AbstractTask task) {
-          sout(":: taskHandler - beforeStart");
         }
         @Override public void started(AbstractTask task) {
-          sout(":: taskHandler - started ");
         }
         /** {@link SampleApp#_initHook} adds the task status listener, which is removed here */
         @Override public void stopped(long time, AbstractTask task) {
-          sout(":: taskHandler [" + task.getName() + "]- stopped");
-          sout(":: time = " + time / 1000f + "sec");
           task.getUIHook().clearAllStatusListeners();
         }
         @Override public void interrupted(Throwable e, AbstractTask task) {
-          sout(":: taskHandler [" + task.getName() + "]- interrupted - " + e.toString());
         }
         @Override public void ok(ByteBuffer value, long time, AbstractTask task) {
-          sout(":: taskHandler [" + task.getName() + "]- ok - size=" + (value == null
-              ? "null"
-              : value.toString()));
           if (_img != null) {
             _displayImgInSameFrame();
           }
@@ -362,10 +324,8 @@ private void _setupTask() {
 
         }
         @Override public void error(Throwable e, long time, AbstractTask task) {
-          sout(":: taskHandler [" + task.getName() + "]- error - " + e.toString());
         }
         @Override public void cancelled(long time, AbstractTask task) {
-          sout(" :: taskHandler [" + task.getName() + "]- cancelled");
         }
       }
   );
@@ -385,8 +345,6 @@ private SwingUIHookAdapter _initHook(SwingUIHookAdapter hook) {
 
       progressBar.setValue(progress);
       progressBar.setString(type.toString());
-
-      sout(msg);
     }
   };
 
@@ -394,7 +352,6 @@ private SwingUIHookAdapter _initHook(SwingUIHookAdapter hook) {
   hook.addSendStatusListener(listener);
   hook.addUnderlyingIOStreamInterruptedOrClosed(new PropertyChangeListener() {
     public void propertyChange(PropertyChangeEvent evt) {
-      sout(evt.getPropertyName() + " fired!!!");
     }
   });
 
@@ -637,41 +594,8 @@ private void initComponents() {
   			panel1.add(label6, new TableLayoutConstraints(2, 0, 2, 0, TableLayoutConstraints.FULL, TableLayoutConstraints.FULL));
 
   			//---- ttfZoom ----
-  			ttfZoom.setText("15");
-  			ttfZoom.getDocument().addDocumentListener(new DocumentListener() {
-  			  public void changedUpdate(DocumentEvent e) {
-  				  if(Integer.parseInt(ttfZoom.getText()) < 20 && Integer.parseInt(ttfZoom.getText()) > 0){
-  					Timer time = new Timer();
-  					time.schedule(new zoomTask(), 3000);
-  				  }
-  			  }
-  			  public void removeUpdate(DocumentEvent e) {
-  			  }
-  			  public void insertUpdate(DocumentEvent e) {
-  				  if(Integer.parseInt(ttfZoom.getText()) < 20 && Integer.parseInt(ttfZoom.getText()) > 0){
-  					Timer time = new Timer();
-  					time.schedule(new zoomTask(), 3000);
-  				  }
-  			  }
-
-  			  class zoomTask extends TimerTask{
-
-  				@Override
-  				public void run() {
-  					zoomSlider.setValue(Integer.parseInt(ttfZoom.getText()));
-  					startTaskAction();
-  				}
-  			  }
-  			});
-  			ttfZoom.addActionListener(new ActionListener(){
-				@Override
-				public void actionPerformed(ActionEvent arg0) {
-  					zoomSlider.setValue(Integer.parseInt(ttfZoom.getText()));
-  					startTaskAction();
-				}
-  			});
   			ttfZoom.setText("14");
-
+  			ttfZoom.setEditable(false);
   			panel1.add(ttfZoom, new TableLayoutConstraints(2, 1, 2, 1, TableLayoutConstraints.FULL, TableLayoutConstraints.FULL));
   			
   			//---- zoomSlider ----
@@ -683,8 +607,8 @@ private void initComponents() {
   			zoomSlider.setPaintTicks(true);
   			zoomSlider.setSnapToTicks(true);
   			zoomSlider.setOrientation(SwingConstants.VERTICAL);
-  			zoomSlider.addChangeListener(zoomEventListener);
   			zoomSlider.setValue(14);
+  			zoomSlider.addChangeListener(zoomEventListener);
   	        zoomSlider.setPaintLabels(true);
   	        zoomSlider.setPaintTrack(true);
   	        zoomSlider.setForeground(Color.BLACK);
@@ -720,6 +644,9 @@ private void initComponents() {
 						p.println(tbxLocName.getText() + ";" + ttfLat.getText() + ";" + ttfLon.getText());
 			  			ddlLocation.removeAllItems();
 						generateLocations();
+						ostream.close();
+						
+						sout("Saved Location: " + tbxLocName.getText() + "(" + ttfLat.getText() + ", " + ttfLon.getText() + ")");
 					} catch (IOException e1) {
 						e1.printStackTrace();
 					}
