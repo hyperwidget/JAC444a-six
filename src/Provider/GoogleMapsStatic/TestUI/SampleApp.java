@@ -91,6 +91,21 @@ public class SampleApp extends JFrame {
 			case 14:
 				shift = .01;
 				break;
+			case 15:
+				shift = .01;
+				break;
+			case 16:
+				shift = .01;
+				break;
+			case 17:
+				shift = .01;
+				break;
+			case 18:
+				shift = .01;
+				break;
+			case 19:
+				shift = .01;
+				break;
 			default:
 				shift = .03;
 					break;				
@@ -136,8 +151,9 @@ public class SampleApp extends JFrame {
 		  }
 	}
 
-	class locationListener implements ActionListener{
+	class LocationListener implements ActionListener{
 		public void actionPerformed(ActionEvent e) {
+			if(ddlLocation.getSelectedIndex()!= 0){
 			try{
 				FileInputStream fstream = new FileInputStream("locations.txt");
 				DataInputStream in = new DataInputStream(fstream);
@@ -147,15 +163,21 @@ public class SampleApp extends JFrame {
 				while ((strLine = br.readLine()) != null)   {			
 					values = strLine.split(";");		
 					if(values[0].equals(ddlLocation.getSelectedItem())){
-					ttfLon.setText(values[1]);
-					ttfLat.setText(values[2]);
+						ttfLat.setText(values[1]);
+						ttfLon.setText(values[2]);
 					}
 				}
 				in.close();
 			  }catch (Exception r){
 			  System.err.println("Error: " + r.getMessage());
-			  }
-			
+			  }	
+			}
+		}
+	}
+	
+	class SaveListener implements ActionListener{
+		public void actionPerformed(ActionEvent e) {
+	
 		}
 		
 	}
@@ -627,7 +649,6 @@ private void initComponents() {
   			panel1.add(label4, new TableLayoutConstraints(0, 0, 0, 0, TableLayoutConstraints.FULL, TableLayoutConstraints.FULL));
 
   			//---- ttfLat ----
-  			ttfLat.setText("38.931099");
   			panel1.add(ttfLat, new TableLayoutConstraints(1, 0, 1, 0, TableLayoutConstraints.FULL, TableLayoutConstraints.FULL));
 
   			//---- btnGetMap ----
@@ -729,6 +750,8 @@ private void initComponents() {
   			
 			//-----ddlLocation----
   			generateLocations();
+  			LocationListener loc = new LocationListener();
+  			ddlLocation.addActionListener(loc);
   			panel1.add(ddlLocation, new TableLayoutConstraints(0,3,1,3, TableLayoutConstraints.FULL, TableLayoutConstraints.FULL));
   	
   			//----lblLocName----
