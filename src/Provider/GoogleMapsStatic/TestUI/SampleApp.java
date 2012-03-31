@@ -28,12 +28,9 @@ import java.awt.event.*;
 import java.awt.image.*;
 import java.beans.*;
 import java.io.BufferedReader;
-import java.io.BufferedWriter;
 import java.io.DataInputStream;
-import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
-import java.io.FileWriter;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.PrintStream;
@@ -55,7 +52,6 @@ public class SampleApp extends JFrame {
 		double shift, newValue;
 		
 		private void getShift(){
-			double amount = 0;
 			switch(Integer.parseInt(ttfZoom.getText())){
 			case 1:
 				shift = 30.00;
@@ -191,33 +187,6 @@ public class SampleApp extends JFrame {
 		}
 		
 	}
-	
-private void moveUp(){
-	double newValue = Double.parseDouble(ttfLat.getText())+.005;
-	ttfLat.setText(Double.toString(newValue));
-	startTaskAction();	
-}	
-
-/** @author Hunter Jansen*/
-private void moveDown(){
-	double newValue = Double.parseDouble(ttfLat.getText())-.005;
-	ttfLat.setText(Double.toString(newValue));
-	startTaskAction();	
-}
-
-/** @author Hunter Jansen*/
-private void moveLeft(){
-	double newValue = Double.parseDouble(ttfLon.getText())-.005;
-	ttfLon.setText(Double.toString(newValue));
-	startTaskAction();	
-}
-
-/** @author Hunter Jansen*/
-private void moveRight(){
-	double newValue = Double.parseDouble(ttfLon.getText())+.005;
-	ttfLon.setText(Double.toString(newValue));
-	startTaskAction();	
-}
 
 /** @author Edwin Lim*/
 class zoomEvent implements ChangeListener{
@@ -432,30 +401,6 @@ private SwingUIHookAdapter _initHook(SwingUIHookAdapter hook) {
   return hook;
 }
 
-private void _displayImgInFrame() {
-
-  final JFrame frame = new JFrame("Google Static Map");
-  GUIUtils.setAppIcon(frame, "71.png");
-  frame.setDefaultCloseOperation(DISPOSE_ON_CLOSE);
-
-  JLabel imgLbl = new JLabel(new ImageIcon(_img));
-  imgLbl.setToolTipText(MessageFormat.format("<html>Image downloaded from URI<br>size: w={0}, h={1}</html>",
-                                             _img.getWidth(), _img.getHeight()));
-  imgLbl.addMouseListener(new MouseListener() {
-    public void mouseClicked(MouseEvent e) {}
-    public void mousePressed(MouseEvent e) { frame.dispose();}
-    public void mouseReleased(MouseEvent e) { }
-    public void mouseEntered(MouseEvent e) { }
-    public void mouseExited(MouseEvent e) { }
-  });
-
-  frame.setContentPane(imgLbl);
-  frame.pack();
-
-  GUIUtils.centerOnScreen(frame);
-  frame.setVisible(true);
-}
-
 private void _displayImgInSameFrame() {
 
   mapLabel.setIcon(new ImageIcon(_img));
@@ -521,28 +466,23 @@ public SampleApp() {
   doInit();
 }
 
-private void quitProgram() {
-  _task.shutdown();
-  System.exit(0);
-}
-
 private void initComponents() {
   // JFormDesigner - Component initialization - DO NOT MODIFY  //GEN-BEGIN:initComponents
   // Generated using JFormDesigner non-commercial license
   dialogPane = new JPanel();
   contentPanel = new JPanel();
   panel1 = new JPanel();
-  label2 = new JLabel();
-  ttfSizeW = new JTextField();
+  new JLabel();
+  new JTextField();
   label4 = new JLabel();
   ttfLat = new JTextField();
   btnGetMap = new JButton();
-  label3 = new JLabel();
-  ttfSizeH = new JTextField();
+  new JLabel();
+  new JTextField();
   label5 = new JLabel();
   ttfLon = new JTextField();
   btnQuit = new JButton();
-  label1 = new JLabel();
+  new JLabel();
   ttfLicense = new JTextField();
   label6 = new JLabel();
   ttfZoom = new JTextField();
@@ -649,15 +589,6 @@ private void initComponents() {
   			((TableLayout)panel1.getLayout()).setHGap(5);
   			((TableLayout)panel1.getLayout()).setVGap(5);
 
-  			//---- label2 ----
-//  			label2.setText("Size Width");
-//  			label2.setHorizontalAlignment(SwingConstants.RIGHT);
-//  			panel1.add(label2, new TableLayoutConstraints(0, 0, 0, 0, TableLayoutConstraints.FULL, TableLayoutConstraints.FULL));
-
-  			//---- ttfSizeW ----
-//  			ttfSizeW.setText("512");
-//  			panel1.add(ttfSizeW, new TableLayoutConstraints(1, 0, 1, 0, TableLayoutConstraints.FULL, TableLayoutConstraints.FULL));
-
   			//---- label4 ----
   			label4.setText("Latitude");
   			label4.setHorizontalAlignment(SwingConstants.LEFT);
@@ -684,15 +615,6 @@ private void initComponents() {
   			});
   			panel1.add(btnGetMap, new TableLayoutConstraints(0, 5, 0, 5, TableLayoutConstraints.FULL, TableLayoutConstraints.FULL));
 
-  			//---- label3 ----
-//  			label3.setText("Size Height");
-//  			label3.setHorizontalAlignment(SwingConstants.RIGHT);
-//  			panel1.add(label3, new TableLayoutConstraints(0, 1, 0, 1, TableLayoutConstraints.FULL, TableLayoutConstraints.FULL));
-
-  			//---- ttfSizeH ----
-//  			ttfSizeH.setText("512");
-//  			panel1.add(ttfSizeH, new TableLayoutConstraints(1, 1, 1, 1, TableLayoutConstraints.FULL, TableLayoutConstraints.FULL));
-
   			//---- label5 ----
   			label5.setText("Longitude");
   			label5.setHorizontalAlignment(SwingConstants.LEFT);
@@ -709,34 +631,13 @@ private void initComponents() {
     		});
   			panel1.add(ttfLon, new TableLayoutConstraints(1, 1, 1, 1, TableLayoutConstraints.FULL, TableLayoutConstraints.FULL));
 
-  			//---- btnQuit ----
-//  			btnQuit.setText("Quit");
-//  			btnQuit.setMnemonic('Q');
-//  			btnQuit.setHorizontalAlignment(SwingConstants.LEFT);
-//  			btnQuit.setHorizontalTextPosition(SwingConstants.LEFT);
-//  			btnQuit.addActionListener(new ActionListener() {
-//  				public void actionPerformed(ActionEvent e) {
-//  					quitProgram();
-//  				}
-//  			});
-//  			panel1.add(btnQuit, new TableLayoutConstraints(1, 5, 1, 5, TableLayoutConstraints.FULL, TableLayoutConstraints.FULL));
-
-  			//---- label1 ----
-//  			label1.setText("License Key");
-//  			label1.setHorizontalAlignment(SwingConstants.RIGHT);
-//  			panel1.add(label1, new TableLayoutConstraints(0, 2, 0, 2, TableLayoutConstraints.FULL, TableLayoutConstraints.FULL));
-
-  			//---- ttfLicense ----
-//  			ttfLicense.setToolTipText("Enter your own URI for a file to download in the background");
-//  			panel1.add(ttfLicense, new TableLayoutConstraints(1, 2, 1, 2, TableLayoutConstraints.FULL, TableLayoutConstraints.FULL));
-
   			//---- label6 ----
   			label6.setText("Zoom");
   			label6.setHorizontalAlignment(SwingConstants.CENTER);
   			panel1.add(label6, new TableLayoutConstraints(2, 0, 2, 0, TableLayoutConstraints.FULL, TableLayoutConstraints.FULL));
 
   			//---- ttfZoom ----
-  			ttfZoom.setText("14");
+  			ttfZoom.setText("15");
   			ttfZoom.getDocument().addDocumentListener(new DocumentListener() {
   			  public void changedUpdate(DocumentEvent e) {
   				  if(Integer.parseInt(ttfZoom.getText()) < 20 && Integer.parseInt(ttfZoom.getText()) > 0){
@@ -769,6 +670,7 @@ private void initComponents() {
   					startTaskAction();
 				}
   			});
+  			ttfZoom.setText("14");
 
   			panel1.add(ttfZoom, new TableLayoutConstraints(2, 1, 2, 1, TableLayoutConstraints.FULL, TableLayoutConstraints.FULL));
   			
@@ -828,7 +730,6 @@ private void initComponents() {
   			//----tbxLocName----
   			tbxLocName.setText("");
   			panel1.add(tbxLocName, new TableLayoutConstraints(0,6,0,6, TableLayoutConstraints.FULL, TableLayoutConstraints.FULL));
-  		
   		}
   		contentPanel.add(panel1, new TableLayoutConstraints(0, 0, 0, 0, TableLayoutConstraints.FULL, TableLayoutConstraints.FULL));
   		
@@ -911,17 +812,12 @@ private void initComponents() {
 private JPanel dialogPane;
 private JPanel contentPanel;
 private JPanel panel1;
-private JLabel label2;
-private JTextField ttfSizeW;
 private JLabel label4;
 private JTextField ttfLat;
 private JButton btnGetMap;
-private JLabel label3;
-private JTextField ttfSizeH;
 private JLabel label5;
 private JTextField ttfLon;
 private JButton btnQuit;
-private JLabel label1;
 private JTextField ttfLicense;
 private JLabel label6;
 private JTextField ttfZoom;
