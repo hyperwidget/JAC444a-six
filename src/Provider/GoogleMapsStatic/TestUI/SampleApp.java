@@ -191,6 +191,33 @@ public class SampleApp extends JFrame {
 		}
 		
 	}
+	
+private void moveUp(){
+	double newValue = Double.parseDouble(ttfLat.getText())+.005;
+	ttfLat.setText(Double.toString(newValue));
+	startTaskAction();	
+}	
+
+/** @author Hunter Jansen*/
+private void moveDown(){
+	double newValue = Double.parseDouble(ttfLat.getText())-.005;
+	ttfLat.setText(Double.toString(newValue));
+	startTaskAction();	
+}
+
+/** @author Hunter Jansen*/
+private void moveLeft(){
+	double newValue = Double.parseDouble(ttfLon.getText())-.005;
+	ttfLon.setText(Double.toString(newValue));
+	startTaskAction();	
+}
+
+/** @author Hunter Jansen*/
+private void moveRight(){
+	double newValue = Double.parseDouble(ttfLon.getText())+.005;
+	ttfLon.setText(Double.toString(newValue));
+	startTaskAction();	
+}
 
 /** @author Edwin Lim*/
 class zoomEvent implements ChangeListener{
