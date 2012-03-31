@@ -644,6 +644,13 @@ private void initComponents() {
   				}
   			  }
   			});
+  			ttfZoom.addActionListener(new ActionListener(){
+				@Override
+				public void actionPerformed(ActionEvent arg0) {
+  					zoomSlider.setValue(Integer.parseInt(ttfZoom.getText()));
+  					startTaskAction();
+				}
+  			});
 
   			panel1.add(ttfZoom, new TableLayoutConstraints(2, 1, 2, 1, TableLayoutConstraints.FULL, TableLayoutConstraints.FULL));
   			
