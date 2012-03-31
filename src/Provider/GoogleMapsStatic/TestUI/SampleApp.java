@@ -560,6 +560,35 @@ private void initComponents() {
 
   			//---- ttfLat ----
   			ttfLat.setText("38.931099");
+  			ttfLat.getDocument().addDocumentListener(new DocumentListener() {
+				Timer time = new Timer();
+    			  public void changedUpdate(DocumentEvent e) {
+    				  if(Integer.parseInt(ttfLat.getText()) < 20 && Integer.parseInt(ttfLat.getText()) > 0){
+    					time.schedule(new latTask(), 3000);
+    				  }
+    			  }
+    			  public void removeUpdate(DocumentEvent e) {
+    			  }
+    			  public void insertUpdate(DocumentEvent e) {
+    				  if(Integer.parseInt(ttfLat.getText()) < 20 && Integer.parseInt(ttfLat.getText()) > 0){
+    					time.schedule(new latTask(), 3000);
+    				  }
+    			  }
+
+    			  class latTask extends TimerTask{
+
+    				@Override
+    				public void run() {
+    					startTaskAction();
+    				}
+    			  }
+    		});
+    		ttfLat.addActionListener(new ActionListener(){
+  				@Override
+  				public void actionPerformed(ActionEvent arg0) {
+    					startTaskAction();
+  				}
+    		});
   			panel1.add(ttfLat, new TableLayoutConstraints(1, 0, 1, 0, TableLayoutConstraints.FULL, TableLayoutConstraints.FULL));
 
   			//---- btnGetMap ----
@@ -589,6 +618,35 @@ private void initComponents() {
 
   			//---- ttfLon ----
   			ttfLon.setText("-77.3489");
+  			ttfLon.getDocument().addDocumentListener(new DocumentListener() {
+				Timer time = new Timer();
+    			  public void changedUpdate(DocumentEvent e) {
+    				  if(Integer.parseInt(ttfLon.getText()) < 20 && Integer.parseInt(ttfLon.getText()) > 0){
+    					time.schedule(new lonTask(), 3000);
+    				  }
+    			  }
+    			  public void removeUpdate(DocumentEvent e) {
+    			  }
+    			  public void insertUpdate(DocumentEvent e) {
+    				  if(Integer.parseInt(ttfLon.getText()) < 20 && Integer.parseInt(ttfLon.getText()) > 0){
+    					time.schedule(new lonTask(), 3000);
+    				  }
+    			  }
+
+    			  class lonTask extends TimerTask{
+
+    				@Override
+    				public void run() {
+    					startTaskAction();
+    				}
+    			  }
+    		});
+    		ttfLon.addActionListener(new ActionListener(){
+  				@Override
+  				public void actionPerformed(ActionEvent arg0) {
+    					startTaskAction();
+  				}
+    		});
   			panel1.add(ttfLon, new TableLayoutConstraints(1, 1, 1, 1, TableLayoutConstraints.FULL, TableLayoutConstraints.FULL));
 
   			//---- btnQuit ----
