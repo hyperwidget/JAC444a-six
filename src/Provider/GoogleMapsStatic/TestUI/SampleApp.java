@@ -640,6 +640,7 @@ private void initComponents() {
   				@Override
   				public void run() {
   					zoomSlider.setValue(Integer.parseInt(ttfZoom.getText()));
+  					startTaskAction();
   				}
   			  }
   			});
