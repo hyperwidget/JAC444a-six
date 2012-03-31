@@ -37,6 +37,7 @@ import java.util.concurrent.*;
 
 
 /** @author nazmul idris */
+@SuppressWarnings("serial")
 public class SampleApp extends JFrame {
 /** @author Hunter Jansen*/
 	class MoveListener implements ActionListener{
@@ -232,6 +233,7 @@ class zoomEvent implements ChangeListener{
 // data members
 //XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX
 /** reference to task */
+@SuppressWarnings("rawtypes")
 private SimpleTask _task;
 /** this might be null. holds the image to display in a popup */
 private BufferedImage _img;
@@ -272,7 +274,7 @@ private void doInit() {
 }
 
 /** create a test task and wire it up with a task handler that dumps output to the textarea */
-@SuppressWarnings("unchecked")
+@SuppressWarnings({ "unchecked", "rawtypes" })
 private void _setupTask() {
 
   TaskExecutorIF<ByteBuffer> functor = new TaskExecutorAdapter<ByteBuffer>() {
@@ -356,8 +358,8 @@ private void _setupTask() {
 }
 
 private SwingUIHookAdapter _initHook(SwingUIHookAdapter hook) {
-  hook.enableRecieveStatusNotification(checkboxRecvStatus.isSelected());
-  hook.enableSendStatusNotification(checkboxSendStatus.isSelected());
+  hook.enableRecieveStatusNotification(true);
+  //hook.enableSendStatusNotification(checkboxSendStatus.isSelected());
 
   hook.setProgressMessage(ttfProgressMsg.getText());
 
@@ -365,7 +367,6 @@ private SwingUIHookAdapter _initHook(SwingUIHookAdapter hook) {
     public void propertyChange(PropertyChangeEvent evt) {
       SwingUIHookAdapter.PropertyList type = ProgressMonitorUtils.parseTypeFrom(evt);
       int progress = ProgressMonitorUtils.parsePercentFrom(evt);
-      String msg = ProgressMonitorUtils.parseMessageFrom(evt);
 
       progressBar.setValue(progress);
       progressBar.setString(type.toString());
@@ -472,9 +473,6 @@ private void initComponents() {
   scrollPane1 = new JScrollPane();
   ttaStatus = new JTextArea();
   panel2 = new JPanel();
-  panel3 = new JPanel();
-  checkboxRecvStatus = new JCheckBox();
-  checkboxSendStatus = new JCheckBox();
   ttfProgressMsg = new JTextField();
   progressBar = new JProgressBar();
   lblProgressStatus = new JLabel();
@@ -483,7 +481,7 @@ private void initComponents() {
   lblLocName = new JLabel();
   btnSave = new JButton();
   tbxLocName = new JTextField();
-  panel4 = new JPanel();
+  panel3 = new JPanel();
   mapLabel = new JLabel();
   btnUp = new JButton();
   btnDown = new JButton();
@@ -514,17 +512,17 @@ private void initComponents() {
   		((TableLayout)contentPanel.getLayout()).setHGap(5);
   		((TableLayout)contentPanel.getLayout()).setVGap(5);
 
-  		//======== panel4 ========
-  		panel4.setOpaque(false);
-  		panel4.setBorder(new CompoundBorder(
+  		//======== panel3 ========
+  		panel3.setOpaque(false);
+  		panel3.setBorder(new CompoundBorder(
   				new TitledBorder("Map"),
   				Borders.DLU2_BORDER));
-  		panel4.setLayout(new TableLayout(new double[][]{
+  		panel3.setLayout(new TableLayout(new double[][]{
   			{.05,.90,.05},
   			{.05,.90,.05}	
   		}));
-  		((TableLayout)panel4.getLayout()).setHGap(1);
-  		((TableLayout)panel4.getLayout()).setHGap(1);
+  		((TableLayout)panel3.getLayout()).setHGap(1);
+  		((TableLayout)panel3.getLayout()).setHGap(1);
   		
   		MoveListener moveListen = new MoveListener();
   		
@@ -553,11 +551,11 @@ private void initComponents() {
   		btnRight.setMnemonic('R');
   		btnRight.addActionListener(moveListen);
   		
-  		panel4.add(btnUp, new TableLayoutConstraints(0,0,2,0, TableLayoutConstraints.FULL, TableLayoutConstraints.FULL));
-  		panel4.add(btnDown, new TableLayoutConstraints(0,2,2,2, TableLayoutConstraints.FULL, TableLayoutConstraints.FULL));
-  		panel4.add(btnLeft, new TableLayoutConstraints(0,1,0,1, TableLayoutConstraints.FULL, TableLayoutConstraints.FULL));
-  		panel4.add(btnRight, new TableLayoutConstraints(2,1,2,1, TableLayoutConstraints.FULL, TableLayoutConstraints.FULL));
-  		panel4.add(mapLabel, new TableLayoutConstraints(1,1,1,1, TableLayoutConstraints.FULL, TableLayoutConstraints.FULL));
+  		panel3.add(btnUp, new TableLayoutConstraints(0,0,2,0, TableLayoutConstraints.FULL, TableLayoutConstraints.FULL));
+  		panel3.add(btnDown, new TableLayoutConstraints(0,2,2,2, TableLayoutConstraints.FULL, TableLayoutConstraints.FULL));
+  		panel3.add(btnLeft, new TableLayoutConstraints(0,1,0,1, TableLayoutConstraints.FULL, TableLayoutConstraints.FULL));
+  		panel3.add(btnRight, new TableLayoutConstraints(2,1,2,1, TableLayoutConstraints.FULL, TableLayoutConstraints.FULL));
+  		panel3.add(mapLabel, new TableLayoutConstraints(1,1,1,1, TableLayoutConstraints.FULL, TableLayoutConstraints.FULL));
   		
   		//======== panel1 ========
   		{
@@ -718,47 +716,15 @@ private void initComponents() {
   				{TableLayout.PREFERRED, TableLayout.PREFERRED}}));
   			((TableLayout)panel2.getLayout()).setHGap(5);
   			((TableLayout)panel2.getLayout()).setVGap(5);
-
-  			//======== panel3 ========
-  			{
-  				panel3.setOpaque(false);
-  				panel3.setLayout(new GridLayout(1, 2));
-
-  				//---- checkboxRecvStatus ----
-  				checkboxRecvStatus.setText("Enable \"Recieve\"");
-  				checkboxRecvStatus.setOpaque(false);
-  				checkboxRecvStatus.setToolTipText("Task will fire \"send\" status updates");
-  				checkboxRecvStatus.setSelected(true);
-  				panel3.add(checkboxRecvStatus);
-
-  				//---- checkboxSendStatus ----
-  				checkboxSendStatus.setText("Enable \"Send\"");
-  				checkboxSendStatus.setOpaque(false);
-  				checkboxSendStatus.setToolTipText("Task will fire \"recieve\" status updates");
-  				panel3.add(checkboxSendStatus);
-  			}
-  			panel2.add(panel3, new TableLayoutConstraints(0, 0, 0, 0, TableLayoutConstraints.FULL, TableLayoutConstraints.FULL));
-
-  			//---- ttfProgressMsg ----
-  			ttfProgressMsg.setText("Loading map from Google Static Maps");
-  			ttfProgressMsg.setToolTipText("Set the task progress message here");
-  			panel2.add(ttfProgressMsg, new TableLayoutConstraints(2, 0, 2, 0, TableLayoutConstraints.FULL, TableLayoutConstraints.FULL));
-
+  			
   			//---- progressBar ----
   			progressBar.setStringPainted(true);
   			progressBar.setString("progress %");
   			progressBar.setToolTipText("% progress is displayed here");
-  			panel2.add(progressBar, new TableLayoutConstraints(0, 1, 0, 1, TableLayoutConstraints.FULL, TableLayoutConstraints.FULL));
-
-  			//---- lblProgressStatus ----
-  			lblProgressStatus.setText("task status listener");
-  			lblProgressStatus.setHorizontalTextPosition(SwingConstants.LEFT);
-  			lblProgressStatus.setHorizontalAlignment(SwingConstants.LEFT);
-  			lblProgressStatus.setToolTipText("Task status messages are displayed here when the task runs");
-  			panel2.add(lblProgressStatus, new TableLayoutConstraints(2, 1, 2, 1, TableLayoutConstraints.FULL, TableLayoutConstraints.FULL));
+  			panel2.add(progressBar, new TableLayoutConstraints(0, 1, 2, 1, TableLayoutConstraints.FULL, TableLayoutConstraints.FULL));
   		}
   		contentPanel.add(panel2, new TableLayoutConstraints(0, 2, 0, 2, TableLayoutConstraints.FULL, TableLayoutConstraints.FULL));
-  		contentPanel.add(panel4, new TableLayoutConstraints(1, 0, 1, 2, TableLayoutConstraints.FULL, TableLayoutConstraints.FULL));
+  		contentPanel.add(panel3, new TableLayoutConstraints(1, 0, 1, 2, TableLayoutConstraints.FULL, TableLayoutConstraints.FULL));
   	}
   	dialogPane.add(contentPanel, BorderLayout.CENTER);
   }
@@ -785,9 +751,6 @@ private JTextField ttfZoom;
 private JScrollPane scrollPane1;
 private JTextArea ttaStatus;
 private JPanel panel2;
-private JPanel panel3;
-private JCheckBox checkboxRecvStatus;
-private JCheckBox checkboxSendStatus;
 private JTextField ttfProgressMsg;
 private JProgressBar progressBar;
 private JLabel lblProgressStatus;
@@ -796,7 +759,7 @@ private JLabel lblLocation;
 private JLabel lblLocName;
 private JButton btnSave;
 private JTextField tbxLocName;
-private JPanel panel4;
+private JPanel panel3;
 private JLabel mapLabel;
 private JButton btnUp;
 private JButton btnDown;
