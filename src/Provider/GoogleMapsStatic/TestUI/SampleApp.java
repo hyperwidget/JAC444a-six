@@ -2,6 +2,14 @@
  * Created by JFormDesigner on Mon Apr 21 12:50:34 EDT 2008
  */
 
+/**
+ * This program is a modified version of the software found at 
+ * http://developerlife.com/tutorials/wp-content/uploads/geoip_service.zip
+ * The original source was created by nazmul idris and all the changes
+ * with the original corresponding student author's name 
+ * Changes may have been made by either student after the initial changes
+ */
+
 package Provider.GoogleMapsStatic.TestUI;
 
 import Provider.GoogleMapsStatic.*;
@@ -37,12 +45,27 @@ import java.util.concurrent.*;
 
 
 /** @author nazmul idris */
+@SuppressWarnings("serial")
 public class SampleApp extends JFrame {
-/** @author Hunter Jansen*/
+	
+//XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX
+// Listeners and other Student Generated Code
+//XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX
+	
+	/** @author Hunter Jansen
+	 * The MoveListener is an action listener that changes the longitude
+	 * and latitude by varying amounts depending on the zoom level and
+	 * generates the map with the new information
+	 * */
 	class MoveListener implements ActionListener{
 
 		double shift, newValue;
 		
+		/**
+		 * @author Hunter Jansen
+		 * This method changes the value in shift depending on the current
+		 * value in the ttfZoom component
+		 */
 		private void getShift(){
 			switch(Integer.parseInt(ttfZoom.getText())){
 			case 1:
@@ -108,7 +131,14 @@ public class SampleApp extends JFrame {
 			}
 		}
 		
-	@Override
+	/**
+	 * @Override of actionPerformed method in the ActionListener interface
+	 * @author Hunter Jansen
+	 * Fetches the shift value using the getShift method, and moves the map by
+	 * the shift amount in the corresponding direction of the button that was pressed.
+	 * Also ensures that the longitudinal and latitudinal values will never exceed
+	 * their logical limits
+	 */
 	public void actionPerformed(ActionEvent e) {
 		getShift();
 		if(e.getSource() == btnUp){
@@ -143,21 +173,25 @@ public class SampleApp extends JFrame {
 	}
 }
 	
-	/**
-	 * Random Listener
-	 * @author Hunter
-	 *
-	 */
+	/** @author Hunter Jansen
+	 * The RandomListener is an action listener that randomly changes the
+	 * values in the longitudinal and latitudinal fields and  
+	 * generates the map with the new information
+	 * */
 	class RandomListener implements ActionListener{
 		public void actionPerformed(ActionEvent e){
 			Random generator = new Random();
 			ttfLon.setText(Double.toString((generator.nextDouble() * 180.0) - 90));
 			ttfLat.setText(Double.toString((generator.nextDouble() * 360.0) - 180));
 			startTaskAction();
-			sout("Moved to Random Location: (" + ttfLat.getText() + ", " + ttfLon.getText() + ")");
+			sout("Random Location: (" + ttfLat.getText() + ", " + ttfLon.getText() + ")");
 		}
 	}
 
+	/** @author Hunter Jansen
+	 * The generateLocations is a method that dynamically populates the values
+	 * in the combo box from the locations.txt file
+	 * */
 	public void generateLocations(){
 		try{
 			FileInputStream fstream = new FileInputStream("locations.txt");
@@ -176,6 +210,11 @@ public class SampleApp extends JFrame {
 		}
 	}
 
+	/** @author Hunter Jansen
+	 * The LocationListener is an action listener that determines which
+	 * option was selected in ddlLocation and changes the latitude and
+	 * longitude after it finds the corresponding values in locations.txt
+	 * */
 	class LocationListener implements ActionListener{
 		public void actionPerformed(ActionEvent e) {
 			if(ddlLocation.getSelectedIndex()!= 0){
@@ -194,7 +233,6 @@ public class SampleApp extends JFrame {
 						}
 					}
 					in.close();
-					
 					sout("Viewing Location: " + ddlLocation.getSelectedItem() + "(" + ttfLat.getText() + ", " + ttfLon.getText() + ")");
 				}
 				catch (Exception r){
@@ -207,27 +245,59 @@ public class SampleApp extends JFrame {
 		}
 	}
 	
-	class SaveListener implements ActionListener{
-		public void actionPerformed(ActionEvent e) {
+	/** @author Edwin Lim
+	 * The zoomEvent is a ChangeListener that listens to zoomSlider
+	 * changes and alters the value in ttfZoom to reflect the value
+	 * of zoomSlider
+	 * */
+	class zoomEvent implements ChangeListener{
+		public void stateChanged(ChangeEvent e){
+			JSlider slider = (JSlider)e.getSource();
 	
+			if (slider.getValueIsAdjusting() == false) {
+				String value = "" + zoomSlider.getValue();
+				ttfZoom.setText(value);
+				startTaskAction();
+				sout("Zoom Set To: " + value);
+			}
 		}
-		
 	}
-
-/** @author Edwin Lim*/
-class zoomEvent implements ChangeListener{
-	public void stateChanged(ChangeEvent e){
-		String value = "" + zoomSlider.getValue();
-		ttfZoom.setText(value);
-		startTaskAction();
-		sout("Zoomed To: " + value);
-	}
-}
+	
+	/**  @author Edwin Lim
+	 * The SaveListener is an ActionListener that listens to btnSave
+	 * It ensures that a name has been entered and then writes the value of
+	 * tbxLocname, ttfLat and ttfLon to locations.txt
+	 * */
+	class SaveListener implements ActionListener{
+		public void actionPerformed(ActionEvent e){
+			startTaskAction();
+			if(!tbxLocName.getText().equals("")){
+				try {
+					FileOutputStream ostream = new FileOutputStream("locations.txt", true);
+					PrintStream p = new PrintStream(ostream);
+					p.println(tbxLocName.getText() + ";" + ttfLat.getText() + ";" + ttfLon.getText());
+					ddlLocation.removeAllItems();
+					
+					ostream.close();
+					generateLocations();
+					sout("Saved Location: " + tbxLocName.getText() + "(" + ttfLat.getText() + ", " + ttfLon.getText() + ")");
+				} 
+				catch (IOException e1) {
+					e1.printStackTrace();
+				}
+			}
+			else{
+				sout("Please enter a Location name before saving");
+			}
+		}
+	}	
+	
 	
 //XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX
 // data members
 //XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX
 /** reference to task */
+@SuppressWarnings("rawtypes")
 private SimpleTask _task;
 /** this might be null. holds the image to display in a popup */
 private BufferedImage _img;
@@ -268,7 +338,7 @@ private void doInit() {
 }
 
 /** create a test task and wire it up with a task handler that dumps output to the textarea */
-@SuppressWarnings("unchecked")
+@SuppressWarnings({ "unchecked", "rawtypes" })
 private void _setupTask() {
 
   TaskExecutorIF<ByteBuffer> functor = new TaskExecutorAdapter<ByteBuffer>() {
@@ -352,8 +422,8 @@ private void _setupTask() {
 }
 
 private SwingUIHookAdapter _initHook(SwingUIHookAdapter hook) {
-  hook.enableRecieveStatusNotification(checkboxRecvStatus.isSelected());
-  hook.enableSendStatusNotification(checkboxSendStatus.isSelected());
+  hook.enableRecieveStatusNotification(true);
+  //hook.enableSendStatusNotification(checkboxSendStatus.isSelected());
 
   hook.setProgressMessage(ttfProgressMsg.getText());
 
@@ -361,7 +431,6 @@ private SwingUIHookAdapter _initHook(SwingUIHookAdapter hook) {
     public void propertyChange(PropertyChangeEvent evt) {
       SwingUIHookAdapter.PropertyList type = ProgressMonitorUtils.parseTypeFrom(evt);
       int progress = ProgressMonitorUtils.parsePercentFrom(evt);
-      String msg = ProgressMonitorUtils.parseMessageFrom(evt);
 
       progressBar.setValue(progress);
       progressBar.setString(type.toString());
@@ -399,6 +468,8 @@ private void _displayRespStrInFrame() {
     public void mouseEntered(MouseEvent e) { }
     public void mouseExited(MouseEvent e) { }
   });
+  response.setLineWrap(true);
+  response.setWrapStyleWord(true);
 
   frame.setContentPane(new JScrollPane(response));
   frame.pack();
@@ -433,16 +504,23 @@ private void startTaskAction() {
     _task.execute();
   }
   catch (TaskException e) {
-    sout(e.getMessage());
+    //sout(e.getMessage());
   }
 }
 
-
+/**
+ * adjusted the original code to generate a map when the program launches
+ */
 public SampleApp() {
   initComponents();
   doInit();
 }
 
+
+/**
+ * The main gui implementation code - all additions have been commented, 
+ * however there will be no mention of omissions.
+ */
 private void initComponents() {
   // JFormDesigner - Component initialization - DO NOT MODIFY  //GEN-BEGIN:initComponents
   // Generated using JFormDesigner non-commercial license
@@ -466,18 +544,19 @@ private void initComponents() {
   scrollPane1 = new JScrollPane();
   ttaStatus = new JTextArea();
   panel2 = new JPanel();
-  panel3 = new JPanel();
-  checkboxRecvStatus = new JCheckBox();
-  checkboxSendStatus = new JCheckBox();
   ttfProgressMsg = new JTextField();
   progressBar = new JProgressBar();
   lblProgressStatus = new JLabel();
+  
+  /*
+   * The remaining items were initiated for the new gui layout
+   */
   ddlLocation = new JComboBox();
   lblLocation = new JLabel();
   lblLocName = new JLabel();
   btnSave = new JButton();
   tbxLocName = new JTextField();
-  panel4 = new JPanel();
+  panel3 = new JPanel();
   mapLabel = new JLabel();
   btnUp = new JButton();
   btnDown = new JButton();
@@ -508,52 +587,9 @@ private void initComponents() {
   		((TableLayout)contentPanel.getLayout()).setHGap(5);
   		((TableLayout)contentPanel.getLayout()).setVGap(5);
 
-  		//======== panel4 ========
-  		panel4.setOpaque(false);
-  		panel4.setBorder(new CompoundBorder(
-  				new TitledBorder("Map"),
-  				Borders.DLU2_BORDER));
-  		panel4.setLayout(new TableLayout(new double[][]{
-  			{.05,.90,.05},
-  			{.05,.90,.05}	
-  		}));
-  		((TableLayout)panel4.getLayout()).setHGap(1);
-  		((TableLayout)panel4.getLayout()).setHGap(1);
-  		
-  		MoveListener moveListen = new MoveListener();
-  		
-  		
-  		//----btnUp----
-  		btnUp.setText("^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^");
-  		btnUp.setHorizontalAlignment(SwingConstants.CENTER);
-  		btnUp.setMnemonic('U');
-  		btnUp.addActionListener(moveListen);
-  		
-  		//----btnDown----
-  		btnDown.setText("v v v v v v v v v v v v v v v v v v v v v v v v v v v v v v v v v v v v v v v v v v");
-  		btnDown.setHorizontalAlignment(SwingConstants.CENTER);
-  		btnDown.setMnemonic('D');
-  		btnDown.addActionListener(moveListen);
-  		
-  		//----btnLeft----
-  		btnLeft.setText("<");
-  		btnLeft.setHorizontalAlignment(SwingConstants.CENTER);
-  		btnLeft.setMnemonic('L');
-  		btnLeft.addActionListener(moveListen);
-  		
-  		//----btnRight----
-  		btnRight.setText(">");
-  		btnRight.setHorizontalAlignment(SwingConstants.CENTER);
-  		btnRight.setMnemonic('R');
-  		btnRight.addActionListener(moveListen);
-  		
-  		panel4.add(btnUp, new TableLayoutConstraints(0,0,2,0, TableLayoutConstraints.FULL, TableLayoutConstraints.FULL));
-  		panel4.add(btnDown, new TableLayoutConstraints(0,2,2,2, TableLayoutConstraints.FULL, TableLayoutConstraints.FULL));
-  		panel4.add(btnLeft, new TableLayoutConstraints(0,1,0,1, TableLayoutConstraints.FULL, TableLayoutConstraints.FULL));
-  		panel4.add(btnRight, new TableLayoutConstraints(2,1,2,1, TableLayoutConstraints.FULL, TableLayoutConstraints.FULL));
-  		panel4.add(mapLabel, new TableLayoutConstraints(1,1,1,1, TableLayoutConstraints.FULL, TableLayoutConstraints.FULL));
   		
   		//======== panel1 ========
+  		//----Contains all get map fields and buttons as well as save/retrieve interface
   		{
   			panel1.setOpaque(false);
   			panel1.setBorder(new CompoundBorder(
@@ -567,6 +603,8 @@ private void initComponents() {
   			((TableLayout)panel1.getLayout()).setHGap(5);
   			((TableLayout)panel1.getLayout()).setVGap(5);
 
+  			////Latitude, Longitude and ttfZoom areas
+  			
   			//---- label4 ----
   			label4.setText("Latitude");
   			label4.setHorizontalAlignment(SwingConstants.LEFT);
@@ -582,31 +620,12 @@ private void initComponents() {
     		});
   			panel1.add(ttfLat, new TableLayoutConstraints(1, 0, 1, 0, TableLayoutConstraints.FULL, TableLayoutConstraints.FULL));
 
-  			//---- btnGetMap ----
-  			btnGetMap.setText("Get Map");
-  			btnGetMap.setHorizontalAlignment(SwingConstants.LEFT);
-  			btnGetMap.setMnemonic('G');
-  			btnGetMap.addActionListener(new ActionListener() {
-  				public void actionPerformed(ActionEvent e) {
-  					startTaskAction();
-  				}
-  			});
-  			panel1.add(btnGetMap, new TableLayoutConstraints(0, 5, 0, 5, TableLayoutConstraints.FULL, TableLayoutConstraints.FULL));
-
-  			//----btnRandom----
-  			RandomListener rand = new RandomListener();
-  			btnRandom.setText("Random");
-  			btnRandom.setMnemonic('R');
-  			btnRandom.addActionListener(rand);
-  			panel1.add(btnRandom,new TableLayoutConstraints(1, 5, 1, 5, TableLayoutConstraints.FULL, TableLayoutConstraints.FULL));
-
   			//---- label5 ----
   			label5.setText("Longitude");
   			label5.setHorizontalAlignment(SwingConstants.LEFT);
   			panel1.add(label5, new TableLayoutConstraints(0, 1, 0, 1, TableLayoutConstraints.FULL, TableLayoutConstraints.FULL));
 
   			//---- ttfLon ----
-  			
   			ttfLon.setText("-77.3489");
     		ttfLon.addActionListener(new ActionListener(){
   				@Override
@@ -626,7 +645,25 @@ private void initComponents() {
   			ttfZoom.setEditable(false);
   			panel1.add(ttfZoom, new TableLayoutConstraints(2, 1, 2, 1, TableLayoutConstraints.FULL, TableLayoutConstraints.FULL));
   			
+  			
+  			////Student created interface options
+  			
+  			//----lblLocation
+  			lblLocation.setText("Saved Locations");
+  			lblLocation.setHorizontalAlignment(SwingConstants.CENTER);
+  			panel1.add(lblLocation, new TableLayoutConstraints(0,2,1,2, TableLayoutConstraints.FULL, TableLayoutConstraints.FULL));
+ 
+			//-----ddlLocation----
+  			//----Authored by Hunter Jansen - Displays a list of all saved locations
+  			//----And generates the corresponding map if a location is selected
+  			generateLocations();
+  			LocationListener loc = new LocationListener();
+  			ddlLocation.addActionListener(loc);
+  			panel1.add(ddlLocation, new TableLayoutConstraints(0,3,1,3, TableLayoutConstraints.FULL, TableLayoutConstraints.FULL));
+
   			//---- zoomSlider ----
+  			//---- Authored by Edwin Lim - zoomSlider changes the zoom level and retrieves
+  			//---- a map that reflects the change
   			zoomEvent zoomEventListener = new zoomEvent();
   			zoomSlider.setMinimum(1);
   			zoomSlider.setMaximum(19);
@@ -641,51 +678,48 @@ private void initComponents() {
   	        zoomSlider.setPaintTrack(true);
   	        zoomSlider.setForeground(Color.BLACK);
   			panel1.add(zoomSlider, new TableLayoutConstraints(2, 2, 2, 6, TableLayoutConstraints.FULL, TableLayoutConstraints.FULL));
+ 			
+  			//---- btnGetMap ----
+  			btnGetMap.setText("Get Map");
+  			btnGetMap.setHorizontalAlignment(SwingConstants.LEFT);
+  			btnGetMap.setMnemonic('G');
+  			btnGetMap.addActionListener(new ActionListener() {
+  				public void actionPerformed(ActionEvent e) {
+  					startTaskAction();
+  				}
+  			});
+  			panel1.add(btnGetMap, new TableLayoutConstraints(0, 5, 0, 5, TableLayoutConstraints.FULL, TableLayoutConstraints.FULL));
 
-  			//----lblLocation
-  			lblLocation.setText("Saved Locations");
-  			lblLocation.setHorizontalAlignment(SwingConstants.CENTER);
-  			panel1.add(lblLocation, new TableLayoutConstraints(0,2,1,2, TableLayoutConstraints.FULL, TableLayoutConstraints.FULL));
-  			
-			//-----ddlLocation----
-  			generateLocations();
-  			LocationListener loc = new LocationListener();
-  			ddlLocation.addActionListener(loc);
-  			panel1.add(ddlLocation, new TableLayoutConstraints(0,3,1,3, TableLayoutConstraints.FULL, TableLayoutConstraints.FULL));
-  	
+  			//----btnRandom----
+  			//----Authored by Hunter Jansen - Displays a random location
+  			RandomListener rand = new RandomListener();
+  			btnRandom.setText("Random");
+  			btnRandom.setMnemonic('R');
+  			btnRandom.addActionListener(rand);
+  			panel1.add(btnRandom,new TableLayoutConstraints(1, 5, 1, 5, TableLayoutConstraints.FULL, TableLayoutConstraints.FULL));
+
   			//----lblLocName----
+  			//----Authored by Edwin Lim
+  			//----Label where the user can specify the location's name before saving
   			lblLocName.setText("Name to save location as");
   			lblLocation.setHorizontalAlignment(SwingConstants.CENTER);
   			panel1.add(lblLocName, new TableLayoutConstraints(0,4,1,4, TableLayoutConstraints.FULL, TableLayoutConstraints.FULL));
  
   			//----btnSave----
+  			//----Authored by Edwin Lim - Saves the current location with the user
+  			//----specified name and repopulates ddlLocations
+  			SaveListener save = new SaveListener();
   			btnSave.setText("Save Location");
   			btnSave.setHorizontalAlignment(SwingConstants.LEFT);
   			btnSave.setMnemonic('S');
-  			btnSave.addActionListener(new ActionListener(){
-  				public void actionPerformed(ActionEvent e){
-  					startTaskAction();
-  					
-  					try {
-						FileOutputStream ostream = new FileOutputStream("locations.txt", true);
-						PrintStream p = new PrintStream(ostream);
-						p.println(tbxLocName.getText() + ";" + ttfLat.getText() + ";" + ttfLon.getText());
-			  			ddlLocation.removeAllItems();
-						generateLocations();
-						ostream.close();
-						
-						sout("Saved Location: " + tbxLocName.getText() + "(" + ttfLat.getText() + ", " + ttfLon.getText() + ")");
-					} catch (IOException e1) {
-						e1.printStackTrace();
-					}
-  				}
-  			});
-  		    panel1.add(btnSave, new TableLayoutConstraints(1,6,1,6, TableLayoutConstraints.FULL, TableLayoutConstraints.FULL));  		
+  			btnSave.addActionListener(save);
+  			panel1.add(btnSave, new TableLayoutConstraints(1,6,1,6, TableLayoutConstraints.FULL, TableLayoutConstraints.FULL));  		
   			
   			//----tbxLocName----
   			tbxLocName.setText("");
   			panel1.add(tbxLocName, new TableLayoutConstraints(0,6,0,6, TableLayoutConstraints.FULL, TableLayoutConstraints.FULL));
   		}
+  		
   		contentPanel.add(panel1, new TableLayoutConstraints(0, 0, 0, 0, TableLayoutConstraints.FULL, TableLayoutConstraints.FULL));
   		
   		
@@ -712,55 +746,73 @@ private void initComponents() {
   				{TableLayout.PREFERRED, TableLayout.PREFERRED}}));
   			((TableLayout)panel2.getLayout()).setHGap(5);
   			((TableLayout)panel2.getLayout()).setVGap(5);
-
-  			//======== panel3 ========
-  			{
-  				panel3.setOpaque(false);
-  				panel3.setLayout(new GridLayout(1, 2));
-
-  				//---- checkboxRecvStatus ----
-  				checkboxRecvStatus.setText("Enable \"Recieve\"");
-  				checkboxRecvStatus.setOpaque(false);
-  				checkboxRecvStatus.setToolTipText("Task will fire \"send\" status updates");
-  				checkboxRecvStatus.setSelected(true);
-  				panel3.add(checkboxRecvStatus);
-
-  				//---- checkboxSendStatus ----
-  				checkboxSendStatus.setText("Enable \"Send\"");
-  				checkboxSendStatus.setOpaque(false);
-  				checkboxSendStatus.setToolTipText("Task will fire \"recieve\" status updates");
-  				panel3.add(checkboxSendStatus);
-  			}
-  			//panel2.add(panel3, new TableLayoutConstraints(0, 0, 0, 0, TableLayoutConstraints.FULL, TableLayoutConstraints.FULL));
-
-  			//---- ttfProgressMsg ----
-  			ttfProgressMsg.setText("Loading map from Google Static Maps");
-  			ttfProgressMsg.setToolTipText("Set the task progress message here");
-  			//panel2.add(ttfProgressMsg, new TableLayoutConstraints(2, 0, 2, 0, TableLayoutConstraints.FULL, TableLayoutConstraints.FULL));
-
+  			
   			//---- progressBar ----
   			progressBar.setStringPainted(true);
   			progressBar.setString("progress %");
   			progressBar.setToolTipText("% progress is displayed here");
-  			panel2.add(progressBar, new TableLayoutConstraints(0, 1, 0, 1, TableLayoutConstraints.FULL, TableLayoutConstraints.FULL));
-
-  			//---- lblProgressStatus ----
-  			lblProgressStatus.setText("task status listener");
-  			lblProgressStatus.setHorizontalTextPosition(SwingConstants.LEFT);
-  			lblProgressStatus.setHorizontalAlignment(SwingConstants.LEFT);
-  			lblProgressStatus.setToolTipText("Task status messages are displayed here when the task runs");
-  			//panel2.add(lblProgressStatus, new TableLayoutConstraints(2, 1, 2, 1, TableLayoutConstraints.FULL, TableLayoutConstraints.FULL));
+  			panel2.add(progressBar, new TableLayoutConstraints(0, 1, 2, 1, TableLayoutConstraints.FULL, TableLayoutConstraints.FULL));
   		}
   		contentPanel.add(panel2, new TableLayoutConstraints(0, 2, 0, 2, TableLayoutConstraints.FULL, TableLayoutConstraints.FULL));
-  		contentPanel.add(panel4, new TableLayoutConstraints(1, 0, 1, 2, TableLayoutConstraints.FULL, TableLayoutConstraints.FULL));
+  		contentPanel.add(panel3, new TableLayoutConstraints(1, 0, 1, 2, TableLayoutConstraints.FULL, TableLayoutConstraints.FULL));
   	}
   	dialogPane.add(contentPanel, BorderLayout.CENTER);
   }
   contentPane.add(dialogPane, BorderLayout.CENTER);
   setSize(1000, 620);
   setLocationRelativeTo(null);
-  // JFormDesigner - End of component initialization  //GEN-END:initComponents
-}
+  
+  	//======== panel3 ========
+	panel3.setOpaque(false);
+	panel3.setBorder(new CompoundBorder(
+			new TitledBorder("Map"),
+			Borders.DLU2_BORDER));
+	panel3.setLayout(new TableLayout(new double[][]{
+		{.05,.90,.05},
+		{.05,.90,.05}	
+	}));
+	((TableLayout)panel3.getLayout()).setHGap(1);
+	((TableLayout)panel3.getLayout()).setHGap(1);
+	
+	MoveListener moveListen = new MoveListener();
+	
+	
+	//----btnUp----
+	//----Authored by Hunter Jansen - Moves the currently displayed map up
+	btnUp.setText("^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^");
+	btnUp.setHorizontalAlignment(SwingConstants.CENTER);
+	btnUp.setMnemonic('U');
+	btnUp.addActionListener(moveListen);
+	
+	//----btnDown----
+	//----Authored by Hunter Jansen - Moves the currently displayed map down
+	btnDown.setText("v v v v v v v v v v v v v v v v v v v v v v v v v v v v v v v v v v v v v v v v v v");
+	btnDown.setHorizontalAlignment(SwingConstants.CENTER);
+	btnDown.setMnemonic('D');
+	btnDown.addActionListener(moveListen);
+	
+	//----btnLeft----
+	//----Authored by Hunter Jansen - Moves the currently displayed map left
+	btnLeft.setText("<");
+	btnLeft.setHorizontalAlignment(SwingConstants.CENTER);
+	btnLeft.setMnemonic('L');
+	btnLeft.addActionListener(moveListen);
+	
+	//----btnRight----
+	//----Authored by Hunter Jansen - Moves the currently displayed map left
+	btnRight.setText(">");
+	btnRight.setHorizontalAlignment(SwingConstants.CENTER);
+	btnRight.setMnemonic('R');
+	btnRight.addActionListener(moveListen);
+	
+	//----Adds all the new buttons as well as the map Label to panel3
+	panel3.add(btnUp, new TableLayoutConstraints(0,0,2,0, TableLayoutConstraints.FULL, TableLayoutConstraints.FULL));
+	panel3.add(btnDown, new TableLayoutConstraints(0,2,2,2, TableLayoutConstraints.FULL, TableLayoutConstraints.FULL));
+	panel3.add(btnLeft, new TableLayoutConstraints(0,1,0,1, TableLayoutConstraints.FULL, TableLayoutConstraints.FULL));
+	panel3.add(btnRight, new TableLayoutConstraints(2,1,2,1, TableLayoutConstraints.FULL, TableLayoutConstraints.FULL));
+	panel3.add(mapLabel, new TableLayoutConstraints(1,1,1,1, TableLayoutConstraints.FULL, TableLayoutConstraints.FULL));
+
+}  // JFormDesigner - End of component initialization  //GEN-END:initComponents
 
 // JFormDesigner - Variables declaration - DO NOT MODIFY  //GEN-BEGIN:variables
 // Generated using JFormDesigner non-commercial license
@@ -779,18 +831,19 @@ private JTextField ttfZoom;
 private JScrollPane scrollPane1;
 private JTextArea ttaStatus;
 private JPanel panel2;
-private JPanel panel3;
-private JCheckBox checkboxRecvStatus;
-private JCheckBox checkboxSendStatus;
 private JTextField ttfProgressMsg;
 private JProgressBar progressBar;
 private JLabel lblProgressStatus;
+
+/*
+ * The remaining items were initiated for the new gui layout
+ */
 private JComboBox ddlLocation;
 private JLabel lblLocation;
 private JLabel lblLocName;
 private JButton btnSave;
 private JTextField tbxLocName;
-private JPanel panel4;
+private JPanel panel3;
 private JLabel mapLabel;
 private JButton btnUp;
 private JButton btnDown;
