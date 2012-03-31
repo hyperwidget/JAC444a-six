@@ -27,6 +27,10 @@ import java.awt.*;
 import java.awt.event.*;
 import java.awt.image.*;
 import java.beans.*;
+import java.io.BufferedReader;
+import java.io.DataInputStream;
+import java.io.FileInputStream;
+import java.io.InputStreamReader;
 import java.text.*;
 import java.util.Timer;
 import java.util.TimerTask;
@@ -131,9 +135,56 @@ public class SampleApp extends JFrame {
 		}		
 		startTaskAction();
 	}
-	
-	
 }
+
+	public void generateLocations(){
+		try{
+			FileInputStream fstream = new FileInputStream("locations.txt");
+			DataInputStream in = new DataInputStream(fstream);
+			BufferedReader br = new BufferedReader(new InputStreamReader(in));
+			String strLine;
+			String values[];
+			while ((strLine = br.readLine()) != null)   {			
+				values = strLine.split(";");				
+				ddlLocation.addItem(values[0]);
+			}
+			in.close();
+		  }catch (Exception e){
+		  System.err.println("Error: " + e.getMessage());
+		  }
+	}
+
+	class LocationListener implements ActionListener{
+		public void actionPerformed(ActionEvent e) {
+			if(ddlLocation.getSelectedIndex()!= 0){
+			try{
+				FileInputStream fstream = new FileInputStream("locations.txt");
+				DataInputStream in = new DataInputStream(fstream);
+				BufferedReader br = new BufferedReader(new InputStreamReader(in));
+				String strLine;
+				String values[];
+				while ((strLine = br.readLine()) != null)   {			
+					values = strLine.split(";");		
+					if(values[0].equals(ddlLocation.getSelectedItem())){
+						ttfLat.setText(values[1]);
+						ttfLon.setText(values[2]);
+						startTaskAction();
+					}
+				}
+				in.close();
+			  }catch (Exception r){
+			  System.err.println("Error: " + r.getMessage());
+			  }	
+			}
+		}
+	}
+	
+	class SaveListener implements ActionListener{
+		public void actionPerformed(ActionEvent e) {
+	
+		}
+		
+	}
 	
 private void moveUp(){
 	double newValue = Double.parseDouble(ttfLat.getText())+.005;
@@ -749,6 +800,9 @@ private void initComponents() {
   			panel1.add(lblLocation, new TableLayoutConstraints(0,2,1,2, TableLayoutConstraints.FULL, TableLayoutConstraints.FULL));
   			
 			//-----ddlLocation----
+  			generateLocations();
+  			LocationListener loc = new LocationListener();
+  			ddlLocation.addActionListener(loc);
   			panel1.add(ddlLocation, new TableLayoutConstraints(0,3,1,3, TableLayoutConstraints.FULL, TableLayoutConstraints.FULL));
   	
   			//----lblLocName----
