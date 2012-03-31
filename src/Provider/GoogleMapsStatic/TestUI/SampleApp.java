@@ -28,9 +28,15 @@ import java.awt.event.*;
 import java.awt.image.*;
 import java.beans.*;
 import java.io.BufferedReader;
+import java.io.BufferedWriter;
 import java.io.DataInputStream;
+import java.io.File;
 import java.io.FileInputStream;
+import java.io.FileOutputStream;
+import java.io.FileWriter;
+import java.io.IOException;
 import java.io.InputStreamReader;
+import java.io.PrintStream;
 import java.text.*;
 import java.util.Timer;
 import java.util.TimerTask;
@@ -222,6 +228,39 @@ class zoomEvent implements ChangeListener{
 }
 
 /** @author Edwin Lim*/
+class lonlatMouseListener implements MouseListener{
+
+	@Override
+	public void mouseClicked(MouseEvent e) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void mouseEntered(MouseEvent e) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void mouseExited(MouseEvent e) {
+		// TODO Auto-generated method stub
+		startTaskAction();
+	}
+
+	@Override
+	public void mousePressed(MouseEvent e) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void mouseReleased(MouseEvent e) {
+		// TODO Auto-generated method stub
+		
+	}
+	
+}
 	
 //XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX
 // data members
@@ -660,6 +699,7 @@ private void initComponents() {
   			panel1.add(label5, new TableLayoutConstraints(0, 1, 0, 1, TableLayoutConstraints.FULL, TableLayoutConstraints.FULL));
 
   			//---- ttfLon ----
+  			
   			ttfLon.setText("-77.3489");
     		ttfLon.addActionListener(new ActionListener(){
   				@Override
@@ -771,6 +811,16 @@ private void initComponents() {
   			btnSave.addActionListener(new ActionListener(){
   				public void actionPerformed(ActionEvent e){
   					startTaskAction();
+  					
+  					try {
+						FileOutputStream ostream = new FileOutputStream("locations.txt", true);
+						PrintStream p = new PrintStream(ostream);
+						p.println(tbxLocName.getText() + ";" + ttfLat.getText() + ";" + ttfLon.getText());
+			  			ddlLocation.removeAllItems();
+						generateLocations();
+					} catch (IOException e1) {
+						e1.printStackTrace();
+					}
   				}
   			});
   		    panel1.add(btnSave, new TableLayoutConstraints(1,6,1,6, TableLayoutConstraints.FULL, TableLayoutConstraints.FULL));  		
