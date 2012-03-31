@@ -18,10 +18,16 @@ import org.apache.commons.httpclient.methods.*;
 import javax.imageio.*;
 import javax.swing.*;
 import javax.swing.border.*;
+import javax.swing.event.ChangeEvent;
+import javax.swing.event.ChangeListener;
+import javax.swing.event.DocumentEvent;
+import javax.swing.event.DocumentListener;
+
 import java.awt.*;
 import java.awt.event.*;
 import java.awt.image.*;
 import java.beans.*;
+import java.io.*;
 import java.text.*;
 import java.util.concurrent.*;
 
@@ -31,10 +37,13 @@ public class SampleApp extends JFrame {
 	
 	
 	
-/** @author Hunter Jansen*/
 	
-	class EventHandler implements ActionListener{
-
+	
+/**
+ * @author Hunter Jansen
+ */	
+	class DirectionHandler implements ActionListener{
+	
 		double shift, newValue;
 		
 		private void getShift(){
@@ -88,59 +97,133 @@ public class SampleApp extends JFrame {
 			}
 		}
 		
+		public void actionPerformed(ActionEvent e) {
+			getShift();
+			if(e.getSource() == btnUp){
+				newValue = Double.parseDouble(ttfLat.getText())+shift;
+				ttfLat.setText(Double.toString(newValue));
+			}
+			else if(e.getSource() == btnDown){
+				newValue = Double.parseDouble(ttfLat.getText())-shift;
+				ttfLat.setText(Double.toString(newValue));
+			}
+			else if(e.getSource() == btnLeft){
+				newValue = Double.parseDouble(ttfLon.getText())-shift;
+				ttfLon.setText(Double.toString(newValue));			
+			}
+			else if(e.getSource() == btnRight){
+				newValue = Double.parseDouble(ttfLon.getText())+shift;
+				ttfLon.setText(Double.toString(newValue));
+			}		
+			startTaskAction();
+		}	
+	}
+
+	public void generateLocations(){
+		try{
+			FileInputStream fstream = new FileInputStream("locations.txt");
+			DataInputStream in = new DataInputStream(fstream);
+			BufferedReader br = new BufferedReader(new InputStreamReader(in));
+			String strLine;
+			String values[];
+			while ((strLine = br.readLine()) != null)   {			
+				values = strLine.split(";");				
+				ddlLocation.addItem(values[0]);
+			}
+			in.close();
+		  }catch (Exception e){
+		  System.err.println("Error: " + e.getMessage());
+		  }
+	}
+
+	class locationListener implements ActionListener{
+		public void actionPerformed(ActionEvent e) {
+			try{
+				FileInputStream fstream = new FileInputStream("locations.txt");
+				DataInputStream in = new DataInputStream(fstream);
+				BufferedReader br = new BufferedReader(new InputStreamReader(in));
+				String strLine;
+				String values[];
+				while ((strLine = br.readLine()) != null)   {			
+					values = strLine.split(";");		
+					if(values[0].equals(ddlLocation.getSelectedItem())){
+					ttfLon.setText(values[1]);
+					ttfLat.setText(values[2]);
+					}
+				}
+				in.close();
+			  }catch (Exception r){
+			  System.err.println("Error: " + r.getMessage());
+			  }
+			
+		}
+		
+	}
+/** @author Edwin Lim*/
+class zoomEvent implements ChangeListener{
+	public void stateChanged(ChangeEvent e){
+		String value = "" + zoomSlider.getValue();
+		ttfZoom.setText(value);
+	}
+}
+
+/** @author Edwin Lim*/
+class ZoomDocumentListener implements DocumentListener{
+
 	@Override
-	public void actionPerformed(ActionEvent e) {
-		getShift();
-		if(e.getSource() == btnUp){
-			newValue = Double.parseDouble(ttfLat.getText())+shift;
-			ttfLat.setText(Double.toString(newValue));
-		}
-		else if(e.getSource() == btnDown){
-			newValue = Double.parseDouble(ttfLat.getText())-shift;
-			ttfLat.setText(Double.toString(newValue));
-		}
-		else if(e.getSource() == btnLeft){
-			newValue = Double.parseDouble(ttfLon.getText())-shift;
-			ttfLon.setText(Double.toString(newValue));			
-		}
-		else if(e.getSource() == btnRight){
-			newValue = Double.parseDouble(ttfLon.getText())+shift;
-			ttfLon.setText(Double.toString(newValue));
-		}		
-		startTaskAction();
+	public void changedUpdate(DocumentEvent e) {
+		// TODO Auto-generated method stub
+		String value = "" + zoomSlider.getValue();
+		ttfZoom.setText(value);
+	}
+
+	@Override
+	public void insertUpdate(DocumentEvent e) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void removeUpdate(DocumentEvent e) {
+		// TODO Auto-generated method stub
+		
+	}
+}
+
+/** @author Edwin Lim*/
+/*class ZoomMouseListener implements MouseListener{
+
+	@Override
+	public void mouseClicked(MouseEvent e) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void mouseEntered(MouseEvent e) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void mouseExited(MouseEvent e) {
+		// TODO Auto-generated method stub
+		zoomSlider.setValue(Integer.parseInt(ttfZoom.getText()));
+	}
+
+	@Override
+	public void mousePressed(MouseEvent e) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void mouseReleased(MouseEvent e) {
+		// TODO Auto-generated method stub
+		
 	}
 	
-	
-}
-	
-private void moveUp(){
-	double newValue = Double.parseDouble(ttfLat.getText())+.005;
-	ttfLat.setText(Double.toString(newValue));
-	startTaskAction();	
-}	
-
-/** @author Hunter Jansen*/
-private void moveDown(){
-	double newValue = Double.parseDouble(ttfLat.getText())-.005;
-	ttfLat.setText(Double.toString(newValue));
-	startTaskAction();	
-}
-
-/** @author Hunter Jansen*/
-private void moveLeft(){
-	double newValue = Double.parseDouble(ttfLon.getText())-.005;
-	ttfLon.setText(Double.toString(newValue));
-	startTaskAction();	
-}
-
-/** @author Hunter Jansen*/
-private void moveRight(){
-	double newValue = Double.parseDouble(ttfLon.getText())+.005;
-	ttfLon.setText(Double.toString(newValue));
-	startTaskAction();	
-}
-
-	
+}*/
 	
 //XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX
 // data members
@@ -446,6 +529,7 @@ private void initComponents() {
   btnDown = new JButton();
   btnLeft = new JButton();
   btnRight = new JButton();
+  zoomSlider = new JSlider();
 
   //======== this ========
   setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
@@ -481,7 +565,7 @@ private void initComponents() {
   		((TableLayout)panel4.getLayout()).setHGap(1);
   		((TableLayout)panel4.getLayout()).setHGap(1);
   		
-  		EventHandler moveListen = new EventHandler();
+  		DirectionHandler moveListen = new DirectionHandler();
   		
   		
   		//----btnUp----
@@ -521,10 +605,10 @@ private void initComponents() {
   				new TitledBorder("Configure the inputs to Google Static Maps"),
   				Borders.DLU2_BORDER));
   			panel1.setLayout(new TableLayout(new double[][] {
-  				{0.44, 0.56, TableLayout.FILL},
+  				{0.35, 0.35, 0.30, TableLayout.FILL},
   				{TableLayout.PREFERRED, TableLayout.PREFERRED, TableLayout.PREFERRED,
   				TableLayout.PREFERRED,TableLayout.PREFERRED, TableLayout.PREFERRED,
-  				TableLayout.PREFERRED, TableLayout.PREFERRED  }}));
+  				TableLayout.PREFERRED}}));
   			((TableLayout)panel1.getLayout()).setHGap(5);
   			((TableLayout)panel1.getLayout()).setVGap(5);
 
@@ -598,25 +682,59 @@ private void initComponents() {
 
   			//---- label6 ----
   			label6.setText("Zoom");
-  			label6.setHorizontalAlignment(SwingConstants.LEFT);
-  			panel1.add(label6, new TableLayoutConstraints(0, 2, 0, 2, TableLayoutConstraints.FULL, TableLayoutConstraints.FULL));
+  			label6.setHorizontalAlignment(SwingConstants.CENTER);
+  			panel1.add(label6, new TableLayoutConstraints(2, 0, 2, 0, TableLayoutConstraints.FULL, TableLayoutConstraints.FULL));
 
   			//---- ttfZoom ----
+  			//ZoomMouseListener zoomMouseListener = new ZoomMouseListener();
+  			ZoomDocumentListener zoomDocListener = new ZoomDocumentListener();
+  			
   			ttfZoom.setText("14");
-  			panel1.add(ttfZoom, new TableLayoutConstraints(1, 2, 1, 2, TableLayoutConstraints.FULL, TableLayoutConstraints.FULL));
+  			//ttfZoom.addMouseListener(zoomMouseListener);
+  			//ttfZoom.getDocument().addDocumentListener(zoomDocListener);
+  			ttfZoom.getDocument().addDocumentListener(new DocumentListener() {
+  			  public void changedUpdate(DocumentEvent e) {
+  			  }
+  			  public void removeUpdate(DocumentEvent e) {
+  			  }
+  			  public void insertUpdate(DocumentEvent e) {
+  				  if(Integer.parseInt(ttfZoom.getText()) < 20 && Integer.parseInt(ttfZoom.getText()) > 0){
+  					  zoomSlider.setValue(Integer.parseInt(ttfZoom.getText().trim()));
+  				  }
+  			  }
+  			});
+
+  			panel1.add(ttfZoom, new TableLayoutConstraints(2, 1, 2, 1, TableLayoutConstraints.FULL, TableLayoutConstraints.FULL));
+  			
+  			//---- zoomSlider ----
+  			zoomEvent zoomEventListener = new zoomEvent();
+  			zoomSlider.setMinimum(1);
+  			zoomSlider.setMaximum(19);
+  			zoomSlider.setMajorTickSpacing(2);
+  			zoomSlider.setMinorTickSpacing(1);
+  			zoomSlider.setPaintTicks(true);
+  			zoomSlider.setSnapToTicks(true);
+  			zoomSlider.setOrientation(SwingConstants.VERTICAL);
+  			zoomSlider.addChangeListener(zoomEventListener);
+  			zoomSlider.setValue(14);
+  	        zoomSlider.setPaintLabels(true);
+  	        zoomSlider.setPaintTrack(true);
+  	        zoomSlider.setForeground(Color.BLACK);
+  			panel1.add(zoomSlider, new TableLayoutConstraints(2, 2, 2, 6, TableLayoutConstraints.FULL, TableLayoutConstraints.FULL));
 
   			//----lblLocation
   			lblLocation.setText("Saved Locations");
   			lblLocation.setHorizontalAlignment(SwingConstants.CENTER);
-  			panel1.add(lblLocation, new TableLayoutConstraints(0,3,1,3, TableLayoutConstraints.FULL, TableLayoutConstraints.FULL));
+  			panel1.add(lblLocation, new TableLayoutConstraints(0,2,1,2, TableLayoutConstraints.FULL, TableLayoutConstraints.FULL));
   			
 			//-----ddlLocation----
-  			panel1.add(ddlLocation, new TableLayoutConstraints(0,4,1,4, TableLayoutConstraints.FULL, TableLayoutConstraints.FULL));
+  			generateLocations();
+  			panel1.add(ddlLocation, new TableLayoutConstraints(0,3,1,3, TableLayoutConstraints.FULL, TableLayoutConstraints.FULL));
   	
   			//----lblLocName----
   			lblLocName.setText("Name to save location as");
   			lblLocation.setHorizontalAlignment(SwingConstants.CENTER);
-  			panel1.add(lblLocName, new TableLayoutConstraints(0,6,1,6, TableLayoutConstraints.FULL, TableLayoutConstraints.FULL));
+  			panel1.add(lblLocName, new TableLayoutConstraints(0,4,1,4, TableLayoutConstraints.FULL, TableLayoutConstraints.FULL));
  
   			//----btnSave----
   			btnSave.setText("Save Location");
@@ -627,11 +745,11 @@ private void initComponents() {
   					startTaskAction();
   				}
   			});
-  		    panel1.add(btnSave, new TableLayoutConstraints(1,7,1,7, TableLayoutConstraints.FULL, TableLayoutConstraints.FULL));  		
+  		    panel1.add(btnSave, new TableLayoutConstraints(1,6,1,6, TableLayoutConstraints.FULL, TableLayoutConstraints.FULL));  		
   			
   			//----tbxLocName----
   			tbxLocName.setText("");
-  			panel1.add(tbxLocName, new TableLayoutConstraints(0,7,0,7, TableLayoutConstraints.FULL, TableLayoutConstraints.FULL));
+  			panel1.add(tbxLocName, new TableLayoutConstraints(0,6,0,6, TableLayoutConstraints.FULL, TableLayoutConstraints.FULL));
   		
   		}
   		contentPanel.add(panel1, new TableLayoutConstraints(0, 0, 0, 0, TableLayoutConstraints.FULL, TableLayoutConstraints.FULL));
@@ -749,6 +867,7 @@ private JButton btnUp;
 private JButton btnDown;
 private JButton btnLeft;
 private JButton btnRight;
+private JSlider zoomSlider;
 
 
 // JFormDesigner - End of variables declaration  //GEN-END:variables
