@@ -1,0 +1,23 @@
+After creating the JAR files, I've imported the JAR files into Eclipse again.
+I've checked that there's no compilation error.
+I will lose 50% if that's not the case.
+
+Java Version: build 1.6.0_30-b12
+
+This readme provides the basic steps required to properly extract the Jar files into a project in 
+Eclipse. It assumes basic knowledge of creating a Java Project in Eclipse.
+
+Unjar steps:
+
+1) Create a new "Java Project" in Eclipse.
+2) Right click on the project folder of the new project.
+3) Select import from the menu.
+4) Select "Archive File" as the import source (under General)
+5) Select the provided jar file (jac444a - six.jar).
+6) Click Finish.
+
+After following these steps both: 
+- Provider.GoogleMapsStatic
+- Provider.GoogleMapsStatic.TestUI 
+
+Should be visible packages in the src folder
