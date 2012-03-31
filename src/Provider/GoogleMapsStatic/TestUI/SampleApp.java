@@ -28,6 +28,8 @@ import java.awt.event.*;
 import java.awt.image.*;
 import java.beans.*;
 import java.text.*;
+import java.util.Timer;
+import java.util.TimerTask;
 import java.util.concurrent.*;
 
 
@@ -154,62 +156,6 @@ class zoomEvent implements ChangeListener{
 }
 
 /** @author Edwin Lim*/
-class ZoomDocumentListener implements DocumentListener{
-
-	@Override
-	public void changedUpdate(DocumentEvent e) {
-		// TODO Auto-generated method stub
-		String value = "" + zoomSlider.getValue();
-		ttfZoom.setText(value);
-	}
-
-	@Override
-	public void insertUpdate(DocumentEvent e) {
-		// TODO Auto-generated method stub
-		
-	}
-
-	@Override
-	public void removeUpdate(DocumentEvent e) {
-		// TODO Auto-generated method stub
-		
-	}
-}
-
-/** @author Edwin Lim*/
-/*class ZoomMouseListener implements MouseListener{
-
-	@Override
-	public void mouseClicked(MouseEvent e) {
-		// TODO Auto-generated method stub
-		
-	}
-
-	@Override
-	public void mouseEntered(MouseEvent e) {
-		// TODO Auto-generated method stub
-		
-	}
-
-	@Override
-	public void mouseExited(MouseEvent e) {
-		// TODO Auto-generated method stub
-		zoomSlider.setValue(Integer.parseInt(ttfZoom.getText()));
-	}
-
-	@Override
-	public void mousePressed(MouseEvent e) {
-		// TODO Auto-generated method stub
-		
-	}
-
-	@Override
-	public void mouseReleased(MouseEvent e) {
-		// TODO Auto-generated method stub
-		
-	}
-	
-}*/
 	
 //XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX
 // data members
@@ -672,21 +618,29 @@ private void initComponents() {
   			panel1.add(label6, new TableLayoutConstraints(2, 0, 2, 0, TableLayoutConstraints.FULL, TableLayoutConstraints.FULL));
 
   			//---- ttfZoom ----
-  			//ZoomMouseListener zoomMouseListener = new ZoomMouseListener();
-  			ZoomDocumentListener zoomDocListener = new ZoomDocumentListener();
-  			
   			ttfZoom.setText("14");
-  			//ttfZoom.addMouseListener(zoomMouseListener);
-  			//ttfZoom.getDocument().addDocumentListener(zoomDocListener);
   			ttfZoom.getDocument().addDocumentListener(new DocumentListener() {
   			  public void changedUpdate(DocumentEvent e) {
+  				  if(Integer.parseInt(ttfZoom.getText()) < 20 && Integer.parseInt(ttfZoom.getText()) > 0){
+  					Timer time = new Timer();
+  					time.schedule(new zoomTask(), 3000);
+  				  }
   			  }
   			  public void removeUpdate(DocumentEvent e) {
   			  }
   			  public void insertUpdate(DocumentEvent e) {
   				  if(Integer.parseInt(ttfZoom.getText()) < 20 && Integer.parseInt(ttfZoom.getText()) > 0){
-  					  zoomSlider.setValue(Integer.parseInt(ttfZoom.getText().trim()));
+  					Timer time = new Timer();
+  					time.schedule(new zoomTask(), 3000);
   				  }
+  			  }
+
+  			  class zoomTask extends TimerTask{
+
+  				@Override
+  				public void run() {
+  					zoomSlider.setValue(Integer.parseInt(ttfZoom.getText()));
+  				}
   			  }
   			});
 
