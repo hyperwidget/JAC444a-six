@@ -32,6 +32,7 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.PrintStream;
 import java.text.*;
+import java.util.Random;
 import java.util.concurrent.*;
 
 
@@ -112,27 +113,49 @@ public class SampleApp extends JFrame {
 		getShift();
 		if(e.getSource() == btnUp){
 			newValue = Double.parseDouble(ttfLat.getText())+shift;
+			if(newValue > 90){
+				newValue -=180;
+			}
 			ttfLat.setText(Double.toString(newValue));
-			sout("Panned UP: " + shift);
 		}
 		else if(e.getSource() == btnDown){
 			newValue = Double.parseDouble(ttfLat.getText())-shift;
+			if(newValue < -90){
+				newValue +=180;
+			}
 			ttfLat.setText(Double.toString(newValue));
-			sout("Panned DOWN: " + shift);
 		}
 		else if(e.getSource() == btnLeft){
 			newValue = Double.parseDouble(ttfLon.getText())-shift;
-			ttfLon.setText(Double.toString(newValue));
-			sout("Panned LEFT: " + shift);		
+			if(newValue < -180){
+				newValue +=360;
+			}
+			ttfLon.setText(Double.toString(newValue));			
 		}
 		else if(e.getSource() == btnRight){
 			newValue = Double.parseDouble(ttfLon.getText())+shift;
+			if(newValue > 180){
+				newValue -=360;
+			}
 			ttfLon.setText(Double.toString(newValue));
-			sout("Panned RIGHT: " + shift);
 		}		
 		startTaskAction();
 	}
 }
+	
+	/**
+	 * Random Listener
+	 * @author Hunter
+	 *
+	 */
+	class RandomListener implements ActionListener{
+		public void actionPerformed(ActionEvent e){
+			Random generator = new Random();
+			ttfLon.setText(Double.toString((generator.nextDouble() * 180.0) - 90));
+			ttfLat.setText(Double.toString((generator.nextDouble() * 360.0) - 180));
+			startTaskAction();
+		}
+	}
 
 	public void generateLocations(){
 		try{
@@ -567,6 +590,13 @@ private void initComponents() {
   			});
   			panel1.add(btnGetMap, new TableLayoutConstraints(0, 5, 0, 5, TableLayoutConstraints.FULL, TableLayoutConstraints.FULL));
 
+  			//----btnRandom----
+  			RandomListener rand = new RandomListener();
+  			btnRandom.setText("Random Location");
+  			btnRandom.setMnemonic('R');
+  			btnRandom.addActionListener(rand);
+  			panel1.add(btnRandom,new TableLayoutConstraints(1, 5, 1, 5, TableLayoutConstraints.FULL, TableLayoutConstraints.FULL));
+
   			//---- label5 ----
   			label5.setText("Longitude");
   			label5.setHorizontalAlignment(SwingConstants.LEFT);
@@ -764,7 +794,7 @@ private JButton btnDown;
 private JButton btnLeft;
 private JButton btnRight;
 private JSlider zoomSlider;
-
+private JButton btnRandom;
 
 // JFormDesigner - End of variables declaration  //GEN-END:variables
 }
