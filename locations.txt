@@ -1,2 +1,2 @@
 Select a location to load
-Seneca@York;43.771404;-79.499474
+Seneca@York;43.771404;-79.499474Begin Point;38.931099;-77.3489
