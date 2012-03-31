@@ -154,7 +154,7 @@ public class SampleApp extends JFrame {
 			ttfLon.setText(Double.toString((generator.nextDouble() * 180.0) - 90));
 			ttfLat.setText(Double.toString((generator.nextDouble() * 360.0) - 180));
 			startTaskAction();
-			sout("Moved to Random Location: (" + ttfLat.getText() + ", " + ttfLon.getText() + ")");
+			sout("Random Location: (" + ttfLat.getText() + ", " + ttfLon.getText() + ")");
 		}
 	}
 
@@ -217,10 +217,14 @@ public class SampleApp extends JFrame {
 /** @author Edwin Lim*/
 class zoomEvent implements ChangeListener{
 	public void stateChanged(ChangeEvent e){
-		String value = "" + zoomSlider.getValue();
-		ttfZoom.setText(value);
-		startTaskAction();
-		sout("Zoomed To: " + value);
+		JSlider slider = (JSlider)e.getSource();
+
+		if (slider.getValueIsAdjusting() == false) {
+			String value = "" + zoomSlider.getValue();
+			ttfZoom.setText(value);
+			startTaskAction();
+			sout("Zoom Set To: " + value);
+		}
 	}
 }
 	
@@ -264,6 +268,7 @@ private void doInit() {
   }
 
   _setupTask();
+  startTaskAction();
 }
 
 /** create a test task and wire it up with a task handler that dumps output to the textarea */
@@ -398,6 +403,8 @@ private void _displayRespStrInFrame() {
     public void mouseEntered(MouseEvent e) { }
     public void mouseExited(MouseEvent e) { }
   });
+  response.setLineWrap(true);
+  response.setWrapStyleWord(true);
 
   frame.setContentPane(new JScrollPane(response));
   frame.pack();
@@ -432,7 +439,7 @@ private void startTaskAction() {
     _task.execute();
   }
   catch (TaskException e) {
-    sout(e.getMessage());
+    //sout(e.getMessage());
   }
 }
 
