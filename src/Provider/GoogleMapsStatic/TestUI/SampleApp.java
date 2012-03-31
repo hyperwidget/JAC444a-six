@@ -20,9 +20,6 @@ import javax.swing.*;
 import javax.swing.border.*;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
-import javax.swing.event.DocumentEvent;
-import javax.swing.event.DocumentListener;
-
 import java.awt.*;
 import java.awt.event.*;
 import java.awt.image.*;
@@ -35,15 +32,13 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.PrintStream;
 import java.text.*;
-import java.util.Timer;
-import java.util.TimerTask;
 import java.util.concurrent.*;
 
 
 /** @author nazmul idris */
 public class SampleApp extends JFrame {
 /** @author Hunter Jansen*/
-	class EventHandler implements ActionListener{
+	class MoveListener implements ActionListener{
 
 		double shift, newValue;
 		
@@ -499,7 +494,7 @@ private void initComponents() {
   		((TableLayout)panel4.getLayout()).setHGap(1);
   		((TableLayout)panel4.getLayout()).setHGap(1);
   		
-  		EventHandler moveListen = new EventHandler();
+  		MoveListener moveListen = new MoveListener();
   		
   		
   		//----btnUp----
