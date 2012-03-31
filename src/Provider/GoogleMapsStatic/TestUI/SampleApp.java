@@ -154,6 +154,7 @@ public class SampleApp extends JFrame {
 			ttfLon.setText(Double.toString((generator.nextDouble() * 180.0) - 90));
 			ttfLat.setText(Double.toString((generator.nextDouble() * 360.0) - 180));
 			startTaskAction();
+			sout("Moved to Random Location: (" + ttfLat.getText() + ", " + ttfLon.getText() + ")");
 		}
 	}
 
@@ -482,6 +483,7 @@ private void initComponents() {
   btnLeft = new JButton();
   btnRight = new JButton();
   zoomSlider = new JSlider();
+  btnRandom = new JButton();
 
   //======== this ========
   setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
@@ -592,7 +594,7 @@ private void initComponents() {
 
   			//----btnRandom----
   			RandomListener rand = new RandomListener();
-  			btnRandom.setText("Random Location");
+  			btnRandom.setText("Random");
   			btnRandom.setMnemonic('R');
   			btnRandom.addActionListener(rand);
   			panel1.add(btnRandom,new TableLayoutConstraints(1, 5, 1, 5, TableLayoutConstraints.FULL, TableLayoutConstraints.FULL));
