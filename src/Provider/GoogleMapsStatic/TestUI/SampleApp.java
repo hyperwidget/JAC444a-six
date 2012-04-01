@@ -273,11 +273,26 @@ public class SampleApp extends JFrame {
 			startTaskAction();
 			if(!tbxLocName.getText().equals("")){
 				try {
+					FileInputStream istream = new FileInputStream("locations.txt");
+					DataInputStream in = new DataInputStream(istream);
+					BufferedReader br = new BufferedReader(new InputStreamReader(in));
+					String strLine;
+					String beforeLine = "";
+					while ((strLine = br.readLine()) != null){
+						beforeLine = strLine;
+					};
+					istream.close();
+
 					FileOutputStream ostream = new FileOutputStream("locations.txt", true);
 					PrintStream p = new PrintStream(ostream);
-					p.println(tbxLocName.getText() + ";" + ttfLat.getText() + ";" + ttfLon.getText());
+					String outLine = "";
+					if(beforeLine.length() <= 2){
+						outLine += "\n";
+					}
+					outLine += tbxLocName.getText() + ";" + ttfLat.getText() + ";" + ttfLon.getText();
+					p.println(outLine);
 					ddlLocation.removeAllItems();
-					
+		
 					ostream.close();
 					generateLocations();
 					sout("Saved Location: " + tbxLocName.getText() + "(" + ttfLat.getText() + ", " + ttfLon.getText() + ")");
@@ -287,10 +302,11 @@ public class SampleApp extends JFrame {
 				}
 			}
 			else{
-				sout("Please enter a Location name before saving");
+			sout("Please enter a Location name before saving");
 			}
 		}
-	}	
+	}
+
 	
 	
 //XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX
@@ -690,7 +706,7 @@ private void initComponents() {
   					startTaskAction();
   				}
   			});
-  			panel1.add(btnGetMap, new TableLayoutConstraints(0, 5, 0, 5, TableLayoutConstraints.FULL, TableLayoutConstraints.FULL));
+  			panel1.add(btnGetMap, new TableLayoutConstraints(0, 4, 0, 4, TableLayoutConstraints.FULL, TableLayoutConstraints.FULL));
 
   			//----btnRandom----
   			//----Authored by Hunter Jansen - Displays a random location
@@ -698,14 +714,14 @@ private void initComponents() {
   			btnRandom.setText("Random");
   			btnRandom.setMnemonic('R');
   			btnRandom.addActionListener(rand);
-  			panel1.add(btnRandom,new TableLayoutConstraints(1, 5, 1, 5, TableLayoutConstraints.FULL, TableLayoutConstraints.FULL));
+  			panel1.add(btnRandom,new TableLayoutConstraints(1, 4, 1, 4, TableLayoutConstraints.FULL, TableLayoutConstraints.FULL));
 
   			//----lblLocName----
   			//----Authored by Edwin Lim
   			//----Label where the user can specify the location's name before saving
   			lblLocName.setText("Name to save location as");
   			lblLocation.setHorizontalAlignment(SwingConstants.CENTER);
-  			panel1.add(lblLocName, new TableLayoutConstraints(0,4,1,4, TableLayoutConstraints.FULL, TableLayoutConstraints.FULL));
+  			panel1.add(lblLocName, new TableLayoutConstraints(0,5,1,5, TableLayoutConstraints.FULL, TableLayoutConstraints.FULL));
  
   			//----btnSave----
   			//----Authored by Edwin Lim - Saves the current location with the user
