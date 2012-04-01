@@ -21,7 +21,8 @@ Unjar steps:
 3) Select import from the menu.
 4) Select "Archive File" as the import source (under General)
 5) Select the provided jar file (jac444a - six.jar).
-6) Click Finish.
+6) Select yes to replace classpath
+7) Click Finish.
 
 After following these steps both: 
 - Provider.GoogleMapsStatic

@@ -1,4 +1,3 @@
 Select a location to load
 Seneca@York;43.771404;-79.499474
-Begin Point;38.931099;-77.3489
-locName;38.931099;-77.3489
+Beginning Point;38.931099;-77.3489

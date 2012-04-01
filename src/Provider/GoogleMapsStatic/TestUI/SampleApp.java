@@ -224,16 +224,18 @@ public class SampleApp extends JFrame {
 					BufferedReader br = new BufferedReader(new InputStreamReader(in));
 					String strLine;
 					String values[];
-					while ((strLine = br.readLine()) != null){			
+					int exit = 0;
+					while ((strLine = br.readLine()) != null && exit == 0){			
 						values = strLine.split(";");		
 						if(values[0].equals(ddlLocation.getSelectedItem())){
 							ttfLat.setText(values[1]);
 							ttfLon.setText(values[2]);
 							startTaskAction();
+							sout("Viewing Location: " + ddlLocation.getSelectedItem() + "(" + ttfLat.getText() + ", " + ttfLon.getText() + ")");
+							exit =1;
 						}
 					}
 					in.close();
-					sout("Viewing Location: " + ddlLocation.getSelectedItem() + "(" + ttfLat.getText() + ", " + ttfLon.getText() + ")");
 				}
 				catch (Exception r){
 					System.err.println("Error: " + r.getMessage());
@@ -270,30 +272,14 @@ public class SampleApp extends JFrame {
 	 * */
 	class SaveListener implements ActionListener{
 		public void actionPerformed(ActionEvent e){
-			startTaskAction();
 			if(!tbxLocName.getText().equals("")){
 				try {
-					FileInputStream istream = new FileInputStream("locations.txt");
-					DataInputStream in = new DataInputStream(istream);
-					BufferedReader br = new BufferedReader(new InputStreamReader(in));
-					String strLine;
-					String beforeLine = "";
-					while ((strLine = br.readLine()) != null){
-						beforeLine = strLine;
-					};
-					istream.close();
-
 					FileOutputStream ostream = new FileOutputStream("locations.txt", true);
 					PrintStream p = new PrintStream(ostream);
-					String outLine = "";
-					if(beforeLine.length() <= 2){
-						outLine += "\n";
-					}
-					outLine += tbxLocName.getText() + ";" + ttfLat.getText() + ";" + ttfLon.getText();
-					p.println(outLine);
-					ddlLocation.removeAllItems();
-		
+					p.print("\n" + tbxLocName.getText() + ";" + ttfLat.getText() + ";" + ttfLon.getText());
 					ostream.close();
+
+					ddlLocation.removeAllItems();
 					generateLocations();
 					sout("Saved Location: " + tbxLocName.getText() + "(" + ttfLat.getText() + ", " + ttfLon.getText() + ")");
 				} 
