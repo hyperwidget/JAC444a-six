@@ -611,6 +611,7 @@ private void initComponents() {
   			panel1.add(label4, new TableLayoutConstraints(0, 0, 0, 0, TableLayoutConstraints.FULL, TableLayoutConstraints.FULL));
 
   			//---- ttfLat ----
+  			//----Edited by Edwin Lim - Added a listener to generate a map when enter is pressed
   			ttfLat.setText("38.931099");
     		ttfLat.addActionListener(new ActionListener(){
   				@Override
@@ -626,6 +627,7 @@ private void initComponents() {
   			panel1.add(label5, new TableLayoutConstraints(0, 1, 0, 1, TableLayoutConstraints.FULL, TableLayoutConstraints.FULL));
 
   			//---- ttfLon ----
+  			//----Edited by Edwin Lim - Added a listener to generate a map when enter is pressed
   			ttfLon.setText("-77.3489");
     		ttfLon.addActionListener(new ActionListener(){
   				@Override
